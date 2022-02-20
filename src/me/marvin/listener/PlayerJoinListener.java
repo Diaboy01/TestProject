@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
 
@@ -19,6 +20,13 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        //Scoreboard board = (Scoreboard) getScoreboardManager().getMainScoreboard();
+        Team team = player.getScoreboard().getPlayerTeam(player);
+        String teamName = team.getName();
+        String teamDisplay = team.getDisplayName();
+
+        player.sendMessage("Team: " + teamName + " | " + teamDisplay);
+
         event.setJoinMessage("§f" + player.getName() + " §7hat den Server betreten!");
 
         if(player.hasPlayedBefore()) {
@@ -36,9 +44,9 @@ public class PlayerJoinListener implements Listener {
         setTablistHeaderAndFooter(player, "Novorex Network", "Sponsor: Nitrado.net");
 
         if(player.isOp()) {
-            player.setPlayerListName("§8[§4Owner§8] §4" + player.getName());
+            player.setPlayerListName("[" + teamDisplay + "] " + player.getName());
         } else {
-            player.setPlayerListName("§8[§7Sklave§8] §4" + player.getName());
+            player.setPlayerListName("[" + teamDisplay + "] " + player.getName());
         }
     }
 
