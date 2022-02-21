@@ -2,10 +2,8 @@ package me.marvin;
 
 import me.marvin.command.AddLeader;
 import me.marvin.command.CreateTeam;
-import me.marvin.command.LeaderInvitePlayer;
-import me.marvin.command.TestCommand;
+import me.marvin.command.Invite;
 import me.marvin.listener.*;
-import me.marvin.world.EmptyChunkGenerator;
 import org.bukkit.*;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,7 +27,7 @@ public class Main extends JavaPlugin {
         pluginManager.registerEvents(new PlayerDeathListener(), this);
 
         getCommand("add").setExecutor(new AddLeader());
-        getCommand("invite").setExecutor(new LeaderInvitePlayer());
+        getCommand("invite").setExecutor(new Invite());
         getCommand("create").setExecutor(new CreateTeam());
 
         /*

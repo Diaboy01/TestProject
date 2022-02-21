@@ -22,11 +22,12 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
+        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
         String prefix = "";
         String suffix = "";
         String teamName = "";
-        teamName = player.getScoreboard().getPlayerTeam(player).getName();
+        teamName = player.getScoreboard().getPlayerTeam(player).getDisplayName();
         //Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
 
 
@@ -42,8 +43,7 @@ public class PlayerJoinListener implements Listener {
             player.sendMessage("§aWillkommen zurück!");
         } else {
             player.sendMessage("§aHerzlich Willkommen!");
-            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-            Bukkit.dispatchCommand(console, "scoreboard teams join -" + " " + playerName);
+            Bukkit.dispatchCommand(console, "scoreboard teams join - " + playerName);
         }
 
         if(player.hasPermission("test.info")) {

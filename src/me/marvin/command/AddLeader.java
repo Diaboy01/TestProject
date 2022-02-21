@@ -1,11 +1,12 @@
 package me.marvin.command;
 
+import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+
+import java.util.Collections;
+import java.util.List;
 
 public class AddLeader implements CommandExecutor {
 
@@ -29,10 +30,10 @@ public class AddLeader implements CommandExecutor {
             }
             if (args.length == 1) {
                 ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-                Bukkit.dispatchCommand(console, "lp user " + args[0] + " permission set luckperms.test");
+                Bukkit.dispatchCommand(console, "lp user " + args[0] + " permission set empire.leader");
                 commandSender.sendMessage("Spieler: " + args[0] + " wurde zum Leader ernannt!");
             }
-        };
+        }
         return false;
     }
 }
