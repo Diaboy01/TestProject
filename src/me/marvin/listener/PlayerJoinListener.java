@@ -1,31 +1,40 @@
 package me.marvin.listener;
 
-import me.marvin.Main;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_12_R1.IChatBaseComponent;
 import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
+
+
 
 public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        //Scoreboard board = (Scoreboard) getScoreboardManager().getMainScoreboard();
-        Team team = player.getScoreboard().getPlayerTeam(player);
-        String teamName = team.getName();
-        String teamDisplay = team.getDisplayName();
+        String playerName = player.getName();
 
-        player.sendMessage("Team: " + teamName + " | " + teamDisplay);
+        String prefix = "";
+        String suffix = "";
+        String teamName = "";
+        teamName = player.getScoreboard().getPlayerTeam(player).getName();
+        //Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+
+
+        prefix = String.format("[%s] ", teamName);
+
+        player.sendMessage("Teamname: " + teamName + " Teamname: " + teamName);
+        player.sendMessage("Prefix: " + prefix + " Suffix: " + suffix);
+        player.sendMessage("DisplayName: " + player.getDisplayName() + " Name: " + player.getName());
 
         event.setJoinMessage("§f" + player.getName() + " §7hat den Server betreten!");
 
@@ -33,6 +42,8 @@ public class PlayerJoinListener implements Listener {
             player.sendMessage("§aWillkommen zurück!");
         } else {
             player.sendMessage("§aHerzlich Willkommen!");
+            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+            Bukkit.dispatchCommand(console, "scoreboard teams join -" + " " + playerName);
         }
 
         if(player.hasPermission("test.info")) {
@@ -44,9 +55,9 @@ public class PlayerJoinListener implements Listener {
         setTablistHeaderAndFooter(player, "Novorex Network", "Sponsor: Nitrado.net");
 
         if(player.isOp()) {
-            player.setPlayerListName("[" + teamDisplay + "] " + player.getName());
+            player.setPlayerListName("" + prefix + player.getDisplayName());
         } else {
-            player.setPlayerListName("[" + teamDisplay + "] " + player.getName());
+            player.setPlayerListName("" + prefix + player.getDisplayName());
         }
     }
 

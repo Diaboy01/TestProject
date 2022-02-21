@@ -48,7 +48,7 @@ public class Main extends JavaPlugin {
             }
         }, 20*5, 20);
         */
-
+        /*
         WorldCreator worldCreator = new WorldCreator(GAME_WORLD_NAME);
         worldCreator.generateStructures(false);
         worldCreator.environment(World.Environment.NORMAL);
@@ -56,6 +56,7 @@ public class Main extends JavaPlugin {
         World world = worldCreator.createWorld();
         new Location(world, 0, 64, 0).getBlock().setType(Material.GRASS);
         world.setSpawnLocation(0, 66, 0);
+        */
     }
 
     @Override

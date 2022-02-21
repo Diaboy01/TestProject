@@ -21,6 +21,8 @@ public class CreateTeam implements CommandExecutor {
                     ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
                     Bukkit.dispatchCommand(console, "scoreboard teams add " + args[0]);
                     commandSender.sendMessage("Team: " + args[0] + " wurde erstellt!");
+                    String playerName = player.getName();
+                    Bukkit.dispatchCommand(console, "scoreboard teams join " + args[0] + " " + playerName);
                 }
             }
         } else {
