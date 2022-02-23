@@ -3,6 +3,7 @@ package me.marvin;
 import me.marvin.command.AddLeader;
 import me.marvin.command.CreateTeam;
 import me.marvin.command.Invite;
+import me.marvin.command.Role;
 import me.marvin.listener.*;
 import org.bukkit.*;
 import org.bukkit.plugin.PluginManager;
@@ -29,6 +30,7 @@ public class Main extends JavaPlugin {
         getCommand("add").setExecutor(new AddLeader());
         getCommand("invite").setExecutor(new Invite());
         getCommand("create").setExecutor(new CreateTeam());
+        getCommand("role").setExecutor(new Role());
 
         /*
         getCommand("test").setExecutor(new TestCommand());

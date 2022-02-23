@@ -14,8 +14,8 @@ import java.util.Date;
 
 public class PlayerDeathListener implements Listener {
 
-    private File deathLogFile = new File("plugins/DeathLog/", "death.log");
-    private File directory = new File("plugins/DeathLog/");
+    private File deathLogFile = new File("plugins/Logs/", "death.log");
+    private File directory = new File("plugins/Logs/");
     private FileWriter fileWriter;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("[dd.MM.yyyy HH:mm:ss]");
 
@@ -36,7 +36,6 @@ public class PlayerDeathListener implements Listener {
             exception.printStackTrace();
         }
     }
-
     /**
      * Schreibt die Todesnachricht in die death.log-Datei.
      *

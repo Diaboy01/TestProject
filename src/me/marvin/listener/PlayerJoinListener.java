@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
-
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 
@@ -24,21 +24,6 @@ public class PlayerJoinListener implements Listener {
         String playerName = player.getName();
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
-        String prefix = "";
-        String suffix = "";
-        String teamName = "";
-        teamName = player.getScoreboard().getPlayerTeam(player).getDisplayName();
-        //Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-
-
-        prefix = String.format("[%s] ", teamName);
-
-        player.sendMessage("Teamname: " + teamName + " Teamname: " + teamName);
-        player.sendMessage("Prefix: " + prefix + " Suffix: " + suffix);
-        player.sendMessage("DisplayName: " + player.getDisplayName() + " Name: " + player.getName());
-
-        event.setJoinMessage("§f" + player.getName() + " §7hat den Server betreten!");
-
         if(player.hasPlayedBefore()) {
             player.sendMessage("§aWillkommen zurück!");
         } else {
@@ -50,15 +35,47 @@ public class PlayerJoinListener implements Listener {
             player.sendMessage("§cSchon ein paar Spieler getötet?");
         }
 
+        String teamName;
+        teamName = player.getScoreboard().getPlayerTeam(player).getDisplayName();
+        String prefix;
+        prefix = String.format("%s", teamName);
+        String suffix = "";
+
+        //TODO Falls Spieler kein Team besitzt -> Error!
+        File playersFile = new File("plugins/Players/", playerName + ".yml");
+        try {
+            FileReader fileReader = new FileReader(playersFile);
+            char[] chars = new char[(int) playersFile.length()];
+            fileReader.read(chars);
+            suffix = new String(chars);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        player.sendMessage("Teamname: " + teamName + " Teamname: " + teamName);
+        player.sendMessage("Prefix: " + prefix + " Suffix: " + suffix);
+        player.sendMessage("DisplayName: " + player.getDisplayName() + " Name: " + player.getName());
+
+        event.setJoinMessage("§f" + player.getName() + " §7hat den Server betreten!");
+
         //player.teleport(Bukkit.getWorld(Main.GAME_WORLD_NAME).getSpawnLocation());
 
         setTablistHeaderAndFooter(player, "Novorex Network", "Sponsor: Nitrado.net");
 
-        if(player.isOp()) {
-            player.setPlayerListName("" + prefix + player.getDisplayName());
-        } else {
-            player.setPlayerListName("" + prefix + player.getDisplayName());
+
+        //TODO Updaten der PlayerList häufiger
+        if (teamName.matches("-")) {
+            player.setPlayerListName("§r\uD83D\uDC80✖ §o" + player.getDisplayName());
+            return;
         }
+
+            if(player.isOp()) {
+                player.setPlayerListName("§r§l" + prefix + " " + player.getDisplayName() + " " + suffix + "");
+            } else {
+                player.setPlayerListName("§r" + prefix + " " + player.getDisplayName() + " " + suffix + "");
+            }
+
     }
 
     public void setTablistHeaderAndFooter(Player player, String h, String f) {
