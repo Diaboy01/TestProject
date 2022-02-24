@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PlayerDeathListener implements Listener {
-
+    //FIXME Field Warnings
     private File deathLogFile = new File("plugins/Logs/", "death.log");
     private File directory = new File("plugins/Logs/");
     private FileWriter fileWriter;

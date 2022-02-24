@@ -4,14 +4,13 @@ import net.minecraft.server.v1_12_R1.IChatBaseComponent;
 import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.lang.reflect.Field;
 
 
@@ -35,27 +34,22 @@ public class PlayerJoinListener implements Listener {
             player.sendMessage("§cSchon ein paar Spieler getötet?");
         }
 
-        String teamName;
-        teamName = player.getScoreboard().getPlayerTeam(player).getDisplayName();
-        String prefix;
-        prefix = String.format("%s", teamName);
-        String suffix = "";
-
+        String teamName = player.getScoreboard().getPlayerTeam(player).getDisplayName();
         //TODO Falls Spieler kein Team besitzt -> Error!
+        String prefix = String.format("%s", teamName);
+
         File playersFile = new File("plugins/Players/", playerName + ".yml");
-        try {
-            FileReader fileReader = new FileReader(playersFile);
-            char[] chars = new char[(int) playersFile.length()];
-            fileReader.read(chars);
-            suffix = new String(chars);
-        } catch (IOException e) {
-            e.printStackTrace();
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
+        String suffix = config.getString("Suffix" + " ");
+        if (suffix == null) {
+            suffix = "";
         }
+        String displayName = config.getString("Nick");
+        player.setDisplayName(displayName);
 
-
+        player.sendMessage("DisplayName: " + player.getDisplayName() + " Name: " + player.getName());
         player.sendMessage("Teamname: " + teamName + " Teamname: " + teamName);
         player.sendMessage("Prefix: " + prefix + " Suffix: " + suffix);
-        player.sendMessage("DisplayName: " + player.getDisplayName() + " Name: " + player.getName());
 
         event.setJoinMessage("§f" + player.getName() + " §7hat den Server betreten!");
 
@@ -64,7 +58,7 @@ public class PlayerJoinListener implements Listener {
         setTablistHeaderAndFooter(player, "Novorex Network", "Sponsor: Nitrado.net");
 
 
-        //TODO Updaten der PlayerList häufiger
+        //TODO Updaten der PlayerList sollte häufiger sein
         if (teamName.matches("-")) {
             player.setPlayerListName("§r\uD83D\uDC80✖ §o" + player.getDisplayName());
             return;

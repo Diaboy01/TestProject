@@ -1,12 +1,9 @@
 package me.marvin.command;
 
-import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
-import java.util.Collections;
-import java.util.List;
 
 public class AddLeader implements CommandExecutor {
 
@@ -15,23 +12,27 @@ public class AddLeader implements CommandExecutor {
         if(commandSender instanceof Player) {
             Player player = (Player) commandSender;
             if (player.hasPermission("empire.admin")) {
-                if (args.length == 0) {
-                    commandSender.sendMessage("Error: Spielernamen angeben!");
+                if (!(args.length == 2)) {
+                    commandSender.sendMessage("Error! Nutze: /add SPIELERNAME TEAMNAME!");
                 }
-                if (args.length == 1) {
+                if (args.length == 2) {
                     ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-                    Bukkit.dispatchCommand(console, "lp user " + args[0] + " permission set luckperms.test");
-                    commandSender.sendMessage("Spieler: " + args[0] + " wurde zum Leader ernannt!");
+                    //TODO Leader in Perm Group Leader stecken
+                    Bukkit.dispatchCommand(console, "lp user " + args[0] + " permission set empire.leader");
+                    commandSender.sendMessage("Spieler: " + args[0] + " wurde zum Leader vom Team: " + args[1] + " ernannt!");
+                    Bukkit.dispatchCommand(console, "scoreboard teams join " + args[1] + " " + args[0]);
                 }
             }
         } else {
-            if (args.length == 0) {
-                commandSender.sendMessage("Error: Spielernamen angeben!");
+            if (!(args.length == 2)) {
+                commandSender.sendMessage("Error! Nutze: /add SPIELERNAME TEAMNAME!");
             }
-            if (args.length == 1) {
+            if (args.length == 2) {
                 ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+                //TODO Leader in Perm Group Leader stecken
                 Bukkit.dispatchCommand(console, "lp user " + args[0] + " permission set empire.leader");
-                commandSender.sendMessage("Spieler: " + args[0] + " wurde zum Leader ernannt!");
+                commandSender.sendMessage("Spieler: " + args[0] + " wurde zum Leader vom Team: " + args[1] + " ernannt!");
+                Bukkit.dispatchCommand(console, "scoreboard teams join " + args[1] + " " + args[0]);
             }
         }
         return false;

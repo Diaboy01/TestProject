@@ -1,9 +1,6 @@
 package me.marvin;
 
-import me.marvin.command.AddLeader;
-import me.marvin.command.CreateTeam;
-import me.marvin.command.Invite;
-import me.marvin.command.Role;
+import me.marvin.command.*;
 import me.marvin.listener.*;
 import org.bukkit.*;
 import org.bukkit.plugin.PluginManager;
@@ -13,6 +10,7 @@ import java.util.Random;
 
 public class Main extends JavaPlugin {
 
+    //TODO Was hat es mit "Spielwelt" aufsich?
     public static String GAME_WORLD_NAME = "Spielwelt";
     public static final Random RANDOM = new Random();
 
@@ -24,13 +22,17 @@ public class Main extends JavaPlugin {
         pluginManager.registerEvents(new PlayerJoinListener(), this);
         // pluginManager.registerEvents(new PlayerMoveListener(), this);
         pluginManager.registerEvents(new PlayerMotdListener(), this);
-        pluginManager.registerEvents(new BlockBreakListener(), this);
+        //pluginManager.registerEvents(new BlockBreakListener(), this);
+        //pluginManager.registerEvents(new PlayerMoveListener(), this);
         pluginManager.registerEvents(new PlayerDeathListener(), this);
+        pluginManager.registerEvents(new ChatListener(), this);
 
         getCommand("add").setExecutor(new AddLeader());
         getCommand("invite").setExecutor(new Invite());
         getCommand("create").setExecutor(new CreateTeam());
         getCommand("role").setExecutor(new Role());
+        getCommand("nick").setExecutor(new Nick());
+
 
         /*
         getCommand("test").setExecutor(new TestCommand());

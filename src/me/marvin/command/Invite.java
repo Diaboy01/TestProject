@@ -20,15 +20,15 @@ public class Invite implements CommandExecutor, TabCompleter {
             if (player.hasPermission("empire.leader")) {
                 teamName = player.getScoreboard().getPlayerTeam(player).getName();
                 if (teamName.matches("-")) {
-                    commandSender.sendMessage("Error: Erstelle erst dein eigenes Team!");
+                    commandSender.sendMessage("Error! Du benötigst ein eigenes Team!");
                     return true;
                 }
                 if (args.length != 1) {
-                    commandSender.sendMessage("Error: Nutze /invite SPIELERNAME");
+                    commandSender.sendMessage("Error! Nutze: /invite SPIELERNAME");
                     return true;
                 }
                 if (args[0].matches(playerName)) {
-                    commandSender.sendMessage("Error: Du kannst dich nicht selbst einladen!");
+                    commandSender.sendMessage("Error! Du kannst dich nicht selbst einladen!");
                     return true;
                 }
                 //TODO Leader soll keine anderen Leader einladen können!
@@ -45,6 +45,7 @@ public class Invite implements CommandExecutor, TabCompleter {
                 }
                 if (player.hasPermission("invite." + args[1])) {
                     if (args[0].equalsIgnoreCase("accept")) {
+                        //TODO Spieler in Team Spieler Perm Group stecken
                         commandSender.sendMessage("Spieler: " + playerName + " wurde zum Team: " + args[1] + " hinzugefügt!");
                         Bukkit.dispatchCommand(console, "scoreboard teams join " + args[1] + " " + playerName);
                     }

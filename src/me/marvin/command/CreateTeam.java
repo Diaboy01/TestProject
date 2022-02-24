@@ -14,20 +14,27 @@ public class CreateTeam implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if(commandSender instanceof Player) {
             Player player = (Player) commandSender;
-            if (player.hasPermission("empire.leader")) {
+            if (player.hasPermission("empire.admin")) {
                 if (args.length == 0) {
-                    commandSender.sendMessage("Error: Teamname angeben!");
+                    commandSender.sendMessage("Error! Nutze: /create TEAMNAME");
                 }
                 if (args.length == 1) {
+                    //TODO lp Create Team Spieler Perm Group + Team Leader Perm Group
                     ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
                     Bukkit.dispatchCommand(console, "scoreboard teams add " + args[0]);
                     commandSender.sendMessage("Team: " + args[0] + " wurde erstellt!");
-                    String playerName = player.getName();
-                    Bukkit.dispatchCommand(console, "scoreboard teams join " + args[0] + " " + playerName);
                 }
             }
         } else {
-            commandSender.sendMessage("Error!");
+            if (args.length == 0) {
+                commandSender.sendMessage("Error! Nutze: /create TEAMNAME");
+            }
+            if (args.length == 1) {
+                //TODO lp Create Team Spieler Perm Group + Team Leader Perm Group
+                ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+                Bukkit.dispatchCommand(console, "scoreboard teams add " + args[0]);
+                commandSender.sendMessage("Team: " + args[0] + " wurde erstellt!");
+            }
         }
         return false;
     }
