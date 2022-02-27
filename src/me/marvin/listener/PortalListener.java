@@ -24,6 +24,7 @@ public class PortalListener implements Listener {
         }
     }
 
+
     @EventHandler
     public void PlayerTeleport(final PlayerTeleportEvent event) {
         final Player player = event.getPlayer();
