@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,24 +13,25 @@ public class Nick implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
-
-        if(!(args.length == 2)) {
-            commandSender.sendMessage("Error! Nutze /nick SPIELERNAME NICKNAME");
-            return false;
-        }
-        //TODO Perm Command only for Leader
-        commandSender.sendMessage("Spieler: " + args[0] + " erhält Nick: " + args[1]);
+        Player player = (Player) commandSender;
         //TODO Nick nur änderbar vom Leader des Teams des Spielers
-        try {
-            printLog(args[0], args[1]);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (player.hasPermission("empire.leader")) {
+            if (!(args.length == 2)) {
+                commandSender.sendMessage("Error! Nutze /nick SPIELERNAME NICKNAME");
+                return false;
+            }
+            commandSender.sendMessage("Spieler: " + args[0] + " erhält Nick: " + args[1]);
+            try {
+                printNick(args[0], args[1]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return true;
     }
 
 
-    public void printLog(String playerName, String nick) throws IOException {
+    public void printNick(String playerName, String nick) throws IOException {
         //TODO Falls /plugins/Players/... noch nicht vorhanden -> Error!
         File playersFile = new File("plugins/Players/", playerName + ".yml");
         File directory = new File("plugins/Players/");
@@ -44,6 +46,10 @@ public class Nick implements CommandExecutor {
         }
 
         config.set("Nick",nick);
-        config.save(playersFile);
-    }
+            try {
+                config.save(playersFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 }

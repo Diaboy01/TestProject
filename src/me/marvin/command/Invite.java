@@ -3,8 +3,10 @@ package me.marvin.command;
 import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,7 +33,13 @@ public class Invite implements CommandExecutor, TabCompleter {
                     commandSender.sendMessage("Error! Du kannst dich nicht selbst einladen!");
                     return true;
                 }
-                //TODO Leader soll keine anderen Leader einladen können!
+
+                File playersFile = new File("plugins/Players/", args[0] + ".yml");
+                YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
+                if (config.getBoolean("Leader")) {
+                    commandSender.sendMessage("Error! Du kannst keinen anderen Leader einladen!");
+                    return true;
+                }
 
                 Bukkit.dispatchCommand(console,  "tellraw " + args[0] + " [\"\",{\"text\":\"Einladung für Team: " + teamName + "\"},{\"text\":\" \",\"color\":\"dark_green\"},{\"text\":\"-> \",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/invite accept " + teamName + "\"}},{\"text\":\"Beitreten\",\"underlined\":true,\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/invite accept " + teamName + "\"}},{\"text\":\" \",\"color\":\"dark_green\"},{\"text\":\"-> \",\"color\":\"red\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/invite decline " + teamName + "\"}},{\"text\":\"Ablehen\",\"underlined\":true,\"color\":\"red\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/invite decline " + teamName + "\"}}]");
                 commandSender.sendMessage("Spieler: " + args[0] + " wurde zum Team: " + teamName + " eingeladen!");

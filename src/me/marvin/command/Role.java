@@ -2,6 +2,7 @@ package me.marvin.command;
 
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,24 +11,25 @@ public class Role implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
-
-        if(!(args.length == 2)) {
-            commandSender.sendMessage("Error! Nutze /role SPIELERNAME ROLLE");
-            return false;
-        }
-        //TODO Perm Command only for Leader
-        commandSender.sendMessage("Spieler: " + args[0] + " erhält Rolle: " + args[1]);
+        Player player = (Player) commandSender;
         //TODO Nur Rolle änderbar vom Leader des Teams des Spielers
-        try {
-            printLog(args[0], args[1]);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (player.hasPermission("empire.leader")) {
+            if (!(args.length == 2)) {
+                commandSender.sendMessage("Error! Nutze /role SPIELERNAME ROLLE");
+                return false;
+            }
+            commandSender.sendMessage("Spieler: " + args[0] + " erhält Rolle: " + args[1]);
+            try {
+                printSuffix(args[0], args[1]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return true;
     }
 
 
-    public void printLog(String playerName, String suffix) throws IOException {
+    public void printSuffix(String playerName, String suffix) throws IOException {
         //TODO Falls /plugins/Players/... noch nicht vorhanden -> Error!
         File playersFile = new File("plugins/Players/", playerName + ".yml");
         File directory = new File("plugins/Players/");
@@ -42,7 +44,11 @@ public class Role implements CommandExecutor {
             }
 
         config.set("Suffix", suffix);
-        config.save(playersFile);
+        try {
+            config.save(playersFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
