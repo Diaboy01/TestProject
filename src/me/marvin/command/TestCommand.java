@@ -25,6 +25,9 @@ public class TestCommand implements CommandExecutor, TabCompleter {
         if(commandSender instanceof Player) {
             // Spieler
 
+
+
+
             commandSender.sendMessage("Hura, du bist ein Spieler!");
 
             if(args.length == 1) {
