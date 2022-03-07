@@ -5,10 +5,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
+
+import static me.marvin.api.YAMLconfig.printYml;
 
 public class Invite implements CommandExecutor, TabCompleter {
 
@@ -56,6 +57,8 @@ public class Invite implements CommandExecutor, TabCompleter {
                         //TODO Spieler in Team Spieler Perm Group stecken
                         commandSender.sendMessage("Spieler: " + playerName + " wurde zum Team: " + args[1] + " hinzugefügt!");
                         Bukkit.dispatchCommand(console, "scoreboard teams join " + args[1] + " " + playerName);
+                        printYml(playerName, "Team", args[1]);
+                        Bukkit.dispatchCommand(console, "kick " + playerName + " Team " + args[1] + " hinzugefügt! Please rejoin!");
                     }
                     if (args[0].equalsIgnoreCase("decline")) {
                         commandSender.sendMessage("Spieler: " + playerName + " wurde zum Team: " + args[1] + " nicht hinzugefügt!");

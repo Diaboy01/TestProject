@@ -1,14 +1,14 @@
 package me.marvin.listener;
 
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.EventHandler;
-import org.bukkit.entity.Player;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.io.File;
 import java.util.Random;
-import org.bukkit.event.Listener;
 
 public class ChatListener implements Listener
 {
@@ -23,16 +23,23 @@ public class ChatListener implements Listener
         Player player = event.getPlayer();
         String playerName = player.getName();
 
-        String teamName = player.getScoreboard().getPlayerTeam(player).getDisplayName();
-        //TODO Falls Spieler kein Team besitzt -> Error!
-        String prefix = String.format("%s", teamName);
-
         File playersFile = new File("plugins/Players/", playerName + ".yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
-        String suffix = config.getString("Suffix" + " ");
+
+        String teamName = config.getString("Team");
+        String prefix = null;
+        if (teamName.matches("-")) {
+            prefix = "§r✖§o";
+        }
+        if (!(teamName.matches("-"))) {
+            prefix = teamName + "";
+        }
+
+        String suffix = config.getString("Role");
         if (suffix == null) {
             suffix = "";
         }
+        suffix = suffix + " ";
 
         String displayName = config.getString("Nick");
         player.setDisplayName(displayName);

@@ -1,5 +1,6 @@
 package me.marvin.command;
 
+import me.marvin.api.YAMLconfig;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -7,49 +8,35 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.io.IOException;
 
 public class Nick implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         Player player = (Player) commandSender;
-        //TODO Nick nur änderbar vom Leader des Teams des Spielers
+        String playerName = player.getName();
+
         if (player.hasPermission("empire.leader")) {
+            File playersFile2 = new File("plugins/Players/", playerName + ".yml");
+            YamlConfiguration config2 = YamlConfiguration.loadConfiguration(playersFile2);
+            String team2 = config2.getString("Team");
+
+            File playersFile1 = new File("plugins/Players/", args[0] + ".yml");
+            YamlConfiguration config1 = YamlConfiguration.loadConfiguration(playersFile1);
+            String team1 = config1.getString("Team");
+
             if (!(args.length == 2)) {
                 commandSender.sendMessage("Error! Nutze /nick SPIELERNAME NICKNAME");
                 return false;
             }
-            commandSender.sendMessage("Spieler: " + args[0] + " erhält Nick: " + args[1]);
-            try {
-                printNick(args[0], args[1]);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (!team1.equals(team2)) {
+                commandSender.sendMessage("Error! Du musst im gleichen Team sein!");
+                return false;
             }
+
+            commandSender.sendMessage("Spieler: " + args[0] + " erhält Nick: " + args[1]);
+            YAMLconfig.printYml(args[0],"Nick", args[1]);
         }
         return true;
     }
-
-
-    public void printNick(String playerName, String nick) throws IOException {
-        //TODO Falls /plugins/Players/... noch nicht vorhanden -> Error!
-        File playersFile = new File("plugins/Players/", playerName + ".yml");
-        File directory = new File("plugins/Players/");
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
-        directory.mkdirs();
-        if (!playersFile.exists()) {
-            try {
-                playersFile.createNewFile();
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-        }
-
-        config.set("Nick",nick);
-            try {
-                config.save(playersFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 }

@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.io.File;
 import java.lang.reflect.Field;
 
+import static me.marvin.api.YAMLconfig.printYml;
 
 
 public class PlayerJoinListener implements Listener {
@@ -28,22 +29,31 @@ public class PlayerJoinListener implements Listener {
         } else {
             player.sendMessage("§aHerzlich Willkommen!");
             Bukkit.dispatchCommand(console, "scoreboard teams join - " + playerName);
+            File playersFile = new File("plugins/Players/", playerName + ".yml");
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
+            printYml(playerName, "Team", "-");
         }
 
         if(player.hasPermission("test.info")) {
             player.sendMessage("§cSchon ein paar Spieler getötet?");
         }
 
-        String teamName = player.getScoreboard().getPlayerTeam(player).getDisplayName();
-        //TODO Falls Spieler kein Team besitzt -> Error!
-        String prefix = String.format("%s", teamName);
-
         File playersFile = new File("plugins/Players/", playerName + ".yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
-        String suffix = config.getString("Suffix" + " ");
-        if (suffix == null) {
-            suffix = "";
+
+        String teamName = config.getString("Team");
+        String p = String.format("%s", teamName);
+        if (p == null) {
+            p = "";
         }
+        String prefix = p + " ";
+
+        String s = config.getString("Role");
+        if (s == null) {
+            s = "";
+        }
+        String suffix = s + " ";
+
         String displayName = config.getString("Nick");
         player.setDisplayName(displayName);
 
@@ -58,7 +68,6 @@ public class PlayerJoinListener implements Listener {
         setTablistHeaderAndFooter(player, "Novorex Network", "Sponsor: Nitrado.net");
 
 
-        //TODO Updaten der PlayerList sollte häufiger sein
         if (teamName.matches("-")) {
             player.setPlayerListName("§r\uD83D\uDC80✖ §o" + player.getDisplayName());
             return;

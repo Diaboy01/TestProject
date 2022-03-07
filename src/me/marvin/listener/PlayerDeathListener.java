@@ -13,15 +13,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PlayerDeathListener implements Listener {
-    //FIXME Field Warnings
-    private File deathLogFile = new File("plugins/Logs/", "death.log");
-    private File directory = new File("plugins/Logs/");
     private FileWriter fileWriter;
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("[dd.MM.yyyy HH:mm:ss]");
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("[dd.MM.yyyy HH:mm:ss]");
 
     public PlayerDeathListener() {
+        File directory = new File("plugins/Logs/");
         directory.mkdirs();
 
+        //FIXME Field Warnings
+        File deathLogFile = new File("plugins/Logs/", "death.log");
         if(!deathLogFile.exists()) {
             try {
                 deathLogFile.createNewFile();
