@@ -4,6 +4,7 @@ author: Diaboy01
 main: me.marvin.Main
 api-version: 1.12
 load: POSTWORLD
+depend: [LuckPerms]
 
 commands:
   add:
