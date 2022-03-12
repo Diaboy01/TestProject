@@ -10,13 +10,16 @@ import java.util.Random;
 
 public class Main extends JavaPlugin {
 
-    //TODO Was hat es mit "Spielwelt" aufsich?
-    public static String GAME_WORLD_NAME = "Spielwelt";
+    public static Main instance;
+
+    //public static String GAME_WORLD_NAME = "Spielwelt";
     public static final Random RANDOM = new Random();
 
     @Override
     public void onEnable() {
         super.onEnable();
+
+        instance = this;
 
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new PlayerJoinListener(), this);
@@ -26,12 +29,15 @@ public class Main extends JavaPlugin {
         //pluginManager.registerEvents(new PlayerMoveListener(), this);
         pluginManager.registerEvents(new PlayerDeathListener(), this);
         pluginManager.registerEvents(new ChatListener(), this);
+        pluginManager.registerEvents(new PlayerWorldTimingListener(), this);
 
         getCommand("add").setExecutor(new AddLeader());
         getCommand("invite").setExecutor(new Invite());
         getCommand("create").setExecutor(new CreateTeam());
         getCommand("role").setExecutor(new Role());
         getCommand("nick").setExecutor(new Nick());
+        getCommand("farmwelt").setExecutor(new Farmwelt());
+        getCommand("wtp").setExecutor(new WorldTeleport());
 
 
         /*

@@ -1,6 +1,6 @@
 package me.marvin.command;
 
-import me.marvin.api.YAMLconfig;
+import me.marvin.api.YAMLPlayers;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -35,7 +35,7 @@ public class Role implements CommandExecutor {
             }
 
             commandSender.sendMessage("Spieler: " + args[0] + " erhält Rolle: " + args[1]);
-            YAMLconfig.printYml(args[0],"Role", args[1]);
+            YAMLPlayers.printYml(args[0],"Role", args[1]);
         }
         return true;
     }

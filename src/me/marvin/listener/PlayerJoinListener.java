@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.io.File;
 import java.lang.reflect.Field;
 
-import static me.marvin.api.YAMLconfig.printYml;
+import static me.marvin.api.YAMLPlayers.printYml;
 
 
 public class PlayerJoinListener implements Listener {

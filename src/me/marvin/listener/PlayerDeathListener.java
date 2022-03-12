@@ -17,11 +17,10 @@ public class PlayerDeathListener implements Listener {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("[dd.MM.yyyy HH:mm:ss]");
 
     public PlayerDeathListener() {
-        File directory = new File("plugins/Logs/");
+        File directory = new File("plugins/Novorex/Logs/");
         directory.mkdirs();
 
-        //FIXME Field Warnings
-        File deathLogFile = new File("plugins/Logs/", "death.log");
+        File deathLogFile = new File("plugins/Novorex/Logs/", "death.log");
         if(!deathLogFile.exists()) {
             try {
                 deathLogFile.createNewFile();

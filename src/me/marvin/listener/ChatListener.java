@@ -19,11 +19,11 @@ public class ChatListener implements Listener
     }
 
     @EventHandler
-    public void onPlayerChat(final AsyncPlayerChatEvent event) {
+    public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
 
-        File playersFile = new File("plugins/Players/", playerName + ".yml");
+        File playersFile = new File("plugins/Novorex/Players/", playerName + ".yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
 
         String teamName = config.getString("Team");

@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
-import static me.marvin.api.YAMLconfig.printYml;
+import static me.marvin.api.YAMLPlayers.printYml;
 
 public class Invite implements CommandExecutor, TabCompleter {
 

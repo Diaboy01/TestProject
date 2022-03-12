@@ -5,11 +5,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 
-public class YAMLconfig {
+public class YAMLPlayers {
     public static void printYml(String playerName, String name, String value) {
-        //TODO Falls /plugins/Players/... noch nicht vorhanden -> Error!
-        File playersFile = new File("plugins/Players/", playerName + ".yml");
-        File directory = new File("plugins/Players/");
+        File playersFile = new File("plugins/Novorex/Players/", playerName + ".yml");
+        File directory = new File("plugins/Novorex/Players/");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
         directory.mkdirs();
         if (!playersFile.exists()) {

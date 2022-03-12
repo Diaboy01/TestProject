@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import static me.marvin.api.YAMLconfig.printYml;
+import static me.marvin.api.YAMLPlayers.printYml;
 
 
 public class AddLeader implements CommandExecutor {

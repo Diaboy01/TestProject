@@ -14,7 +14,7 @@ public class BlockBreakListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
-        if(!block.getWorld().getName().equals(Main.GAME_WORLD_NAME)) {
+        if(!block.getWorld().getName().equals("Main.GAME_WORLD_NAME")) { //"Main.GAME_WORLD_NAME" -> Main.GAME_WORLD_NAME
             return;
         }
 
