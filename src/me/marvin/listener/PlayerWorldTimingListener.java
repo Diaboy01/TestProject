@@ -47,12 +47,11 @@ public class PlayerWorldTimingListener implements Listener {
 
                     if(playerWorldTimings.isCounting()) {
                         String date = Utils.getDate();
-
+                        Bukkit.broadcastMessage("1");
                         Bukkit.broadcastMessage("PlayerWorldTimings.TIME_LIMIT: "+PlayerWorldTimings.TIME_LIMIT);
-                        Bukkit.broadcastMessage("playerWorldTimings.getTimeSpend: "+playerWorldTimings.getTimeSpend());
                         long time = PlayerWorldTimings.TIME_LIMIT - playerWorldTimings.getTimeSpend();
-                        Bukkit.broadcastMessage("playerWorldTimings.getTimeSpend: "+playerWorldTimings.getTimeSpend());
                         Bukkit.broadcastMessage("time: "+time);
+                        Bukkit.broadcastMessage("2");
 
                         if (time < 60000) {
                             player.sendMessage("Achtung! Du hast noch Spielzeit 1 Minute in der Farmwelt, setze ein Home um deine Postion in der Farmwelt zu speichern! Mit: /sethome");

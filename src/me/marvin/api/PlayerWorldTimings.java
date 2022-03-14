@@ -60,10 +60,11 @@ public class PlayerWorldTimings<staic> {
 
     public long getTimeSpend() {
         if(this.started) {
+            Bukkit.broadcastMessage("3");
             Bukkit.broadcastMessage("timeSpend: "+timeSpend);
             Bukkit.broadcastMessage("this.timing: "+this.timing);
             Bukkit.broadcastMessage("System.currentTimeMillis: "+System.currentTimeMillis());
-            return timeSpend -=  this.timing - System.currentTimeMillis(); //TODO Original: return timeSpend = System.currentTimeMillis() - this.timing;
+            return timeSpend =  System.currentTimeMillis() - this.timing; //TODO Original: return timeSpend = System.currentTimeMillis() - this.timing;
         } else {
             return timeSpend;
         }
