@@ -26,7 +26,7 @@ public class AddLeader implements CommandExecutor {
                     Bukkit.dispatchCommand(console, "lp user " + args[0] + " permission set empire.leader");
                     Bukkit.dispatchCommand(console, "scoreboard teams join " + args[1] + " " + args[0]);
                     printYml(args[0], "Team", args[1]);
-                    printYml(args[0], "Leader", "true");
+                    printYml(args[0], "Leader", "true"); //TODO Kann weg, Leader Permission reicht
                     Bukkit.dispatchCommand(console, "kick " + args[0] + " Please rejoin!");
                     commandSender.sendMessage("Spieler: " + args[0] + " wurde zum Leader vom Team: " + args[1] + " ernannt!");
 
@@ -42,7 +42,7 @@ public class AddLeader implements CommandExecutor {
                 Bukkit.dispatchCommand(console, "lp user " + args[0] + " permission set empire.leader");
                 Bukkit.dispatchCommand(console, "scoreboard teams join " + args[1] + " " + args[0]);
                 printYml(args[0], "Team", args[1]);
-                printYml(args[0], "Leader", "true");
+                printYml(args[0], "Leader", "true"); //TODO Kann weg, Leader Permission reicht
                 Bukkit.dispatchCommand(console, "kick " + args[0] + " Please rejoin!");
                 commandSender.sendMessage("Spieler: " + args[0] + " wurde zum Leader vom Team: " + args[1] + " ernannt!");
 

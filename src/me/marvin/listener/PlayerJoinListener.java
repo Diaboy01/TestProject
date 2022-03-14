@@ -1,5 +1,6 @@
 package me.marvin.listener;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_12_R1.IChatBaseComponent;
 import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.Bukkit;
@@ -10,8 +11,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import static me.marvin.api.YAMLPlayers.printYml;
 
@@ -25,20 +28,15 @@ public class PlayerJoinListener implements Listener {
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
         if(player.hasPlayedBefore()) {
-            player.sendMessage("§aWillkommen zurück!");
+            player.sendMessage("§aWillkoomen zurück!");
         } else {
             player.sendMessage("§aHerzlich Willkommen!");
             Bukkit.dispatchCommand(console, "scoreboard teams join - " + playerName);
-            File playersFile = new File("plugins/Players/", playerName + ".yml");
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
             printYml(playerName, "Team", "-");
         }
 
-        if(player.hasPermission("test.info")) {
-            player.sendMessage("§cSchon ein paar Spieler getötet?");
-        }
 
-        File playersFile = new File("plugins/Players/", playerName + ".yml");
+        File playersFile = new File("plugins/Novorex/Players/", playerName + ".yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
 
         String teamName = config.getString("Team");
@@ -75,9 +73,67 @@ public class PlayerJoinListener implements Listener {
 
             if(player.isOp()) {
                 player.setPlayerListName("§r§l" + prefix + " " + player.getDisplayName() + " " + suffix + "");
+                setTag(player, "Test");
             } else {
+                setTag(player,"Test");
                 player.setPlayerListName("§r" + prefix + " " + player.getDisplayName() + " " + suffix + "");
             }
+
+
+            /*
+        Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) this, new Runnable() {
+            @Override
+            public void run() {
+                Bukkit.broadcastMessage("3s");
+                if(player.isOp()) {
+                    player.setPlayerListName("§r§l" + prefix + " " + player.getDisplayName() + " " + suffix + "");
+                } else {
+                    player.setPlayerListName("§r" + prefix + " " + player.getDisplayName() + " " + suffix + "");
+                }
+            }
+        }, 60L); //60 Tick = 3s
+        */
+    }
+    //TODO setTag() geht net :(
+    private void setTag2(Player player, String name) {
+        try {
+
+            Method getHandle = player.getClass().getMethod("getHandle");
+            Object entityPlayer1 = getHandle.invoke(player);
+
+            GameProfile entityPlayer = ((CraftPlayer)player).getHandle().getProfile();
+
+            Field f = entityPlayer .getClass().getDeclaredField("name");
+            f.setAccessible(true);
+            f.set(entityPlayer, name);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setTag(Player player, String tag) {
+
+        try {
+
+            Object nmsPlayer = player;
+            GameProfile profile = ((GameProfile) nmsPlayer.getClass().getMethod("getProfile").invoke(nmsPlayer));
+            Field name = profile.getClass().getDeclaredField("name");
+            name.setAccessible(true);
+            name.set(profile, tag);
+
+            for(Player pls : Bukkit.getOnlinePlayers()){
+
+                pls.hidePlayer(player);
+                pls.showPlayer(pls);
+
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
 
     }
 

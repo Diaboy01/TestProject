@@ -9,6 +9,6 @@ public class PlayerMotdListener implements Listener {
     @EventHandler
     public void onServerPing(ServerListPingEvent event) {
         event.setMaxPlayers(50);
-        event.setMotd("§cCooler Lokaler Server xD\n§fNice nice nice");
+        event.setMotd("§cNovorex Testserver \n§fSponsor: Nitrado.net");
     }
 }

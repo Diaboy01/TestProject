@@ -18,10 +18,11 @@ public class Invite implements CommandExecutor, TabCompleter {
         if(commandSender instanceof Player) {
             Player player = (Player) commandSender;
             ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-            String teamName = "";
             String playerName = player.getName();
             if (player.hasPermission("empire.leader")) {
-                teamName = player.getScoreboard().getPlayerTeam(player).getName();
+                File playersFile = new File("plugins/Novorex/Players/", playerName + ".yml");
+                YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
+                String teamName = config.getString("Team");
                 if (teamName.matches("-")) {
                     commandSender.sendMessage("Error! Du benötigst ein eigenes Team!");
                     return true;
@@ -35,9 +36,13 @@ public class Invite implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                File playersFile = new File("plugins/Players/", args[0] + ".yml");
-                YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
-                if (config.getBoolean("Leader")) {
+                File playersFile2 = new File("plugins/Novorex/Players/", args[0] + ".yml");
+                YamlConfiguration config2 = YamlConfiguration.loadConfiguration(playersFile2);
+
+                //Todo Nutze:             Player target = Bukkit.getPlayer(args[0]);
+                //            target.hasPermission("test");
+
+                if (config2.getBoolean("Leader")) {
                     commandSender.sendMessage("Error! Du kannst keinen anderen Leader einladen!");
                     return true;
                 }

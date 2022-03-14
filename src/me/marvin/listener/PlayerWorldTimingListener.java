@@ -21,7 +21,6 @@ public class PlayerWorldTimingListener implements Listener {
 
     static File generalFile1 = new File("plugins/Novorex/General/","Welten.yml");
     static YamlConfiguration config1 = YamlConfiguration.loadConfiguration(generalFile1);
-    //TODO FARMWORLD sollte auch für andere Dimesnionen gelten! Also !Bauwelt
     private static final String FALLBACK_WORLD = "world", FARMWORLD = config1.getString("Farmwelt");
 
     static {
@@ -47,7 +46,13 @@ public class PlayerWorldTimingListener implements Listener {
                     PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
 
                     if(playerWorldTimings.isCounting()) {
-                        long time = PlayerWorldTimings.FARMWORLD_TIME_LIMIT - playerWorldTimings.getTimeSpend();
+                        String date = Utils.getDate();
+
+                        Bukkit.broadcastMessage("PlayerWorldTimings.TIME_LIMIT: "+PlayerWorldTimings.TIME_LIMIT);
+                        Bukkit.broadcastMessage("playerWorldTimings.getTimeSpend: "+playerWorldTimings.getTimeSpend());
+                        long time = PlayerWorldTimings.TIME_LIMIT - playerWorldTimings.getTimeSpend();
+                        Bukkit.broadcastMessage("playerWorldTimings.getTimeSpend: "+playerWorldTimings.getTimeSpend());
+                        Bukkit.broadcastMessage("time: "+time);
 
                         if (time < 60000) {
                             player.sendMessage("Achtung! Du hast noch Spielzeit 1 Minute in der Farmwelt, setze ein Home um deine Postion in der Farmwelt zu speichern! Mit: /sethome");
@@ -67,7 +72,7 @@ public class PlayerWorldTimingListener implements Listener {
 
                         player.sendActionBar("Verbleibende Spielzeit: " + m + ":" + s );
 
-                        if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.FARMWORLD_TIME_LIMIT)) {
+                        if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
                             player.teleport(Bukkit.getWorld(FALLBACK_WORLD).getSpawnLocation());
                             //TODO zum Team Warp Teleportieren
                             playerWorldTimings.stopCounting();
@@ -82,20 +87,25 @@ public class PlayerWorldTimingListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        String playerName = player.getName();
+
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
 
         String date = Utils.getDate();
-        File generalFile = new File("plugins/General/TimePlayed/", date + ".yml");
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(generalFile);
-        Player joinPlayer = event.getPlayer();
-        String playerName = joinPlayer.getName();
-        String timePlayed = config.getString(playerName);
 
-        playerWorldTimings.appendData(Long.parseLong(timePlayed));
+        File generalFile = new File("plugins/Novorex/General/TimePlayed/", date + ".yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(generalFile);
+
+
+        long timePlayed = config.getLong(playerName);
+
+        player.sendMessage(String.valueOf("timePlayed config.getLong: " + timePlayed));
+
+        playerWorldTimings.appendData(timePlayed);
 
         World world = player.getWorld();
-        if(world.getName().equalsIgnoreCase(FARMWORLD)) {
-            if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.FARMWORLD_TIME_LIMIT)) {
+        if(!(world.getName().equalsIgnoreCase(FALLBACK_WORLD))) {
+            if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
                 player.teleport(Bukkit.getWorld(FALLBACK_WORLD).getSpawnLocation());
                 //TODO zum Team Warp Teleportieren
             } else {
@@ -112,14 +122,14 @@ public class PlayerWorldTimingListener implements Listener {
         World worldFrom = event.getFrom();
 
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
-        if(!worldTo.getName().equalsIgnoreCase(FARMWORLD)) {
+        if(worldTo.getName().equalsIgnoreCase(FALLBACK_WORLD)) {
             if(playerWorldTimings.isCounting()) {
                 playerWorldTimings.stopCounting();
             }
             return;
         }
 
-        if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.FARMWORLD_TIME_LIMIT)) {
+        if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
             player.teleport(worldFrom.getSpawnLocation());
         } else {
             playerWorldTimings.startCounting();
@@ -131,12 +141,17 @@ public class PlayerWorldTimingListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
+        String date = Utils.getDate();
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
 
-        String timePlayed = String.valueOf(playerWorldTimings.getTimeSpend());
-        String date = Utils.getDate();
+        File generalFile = new File("plugins/General/TimePlayed/", date + ".yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(generalFile);
 
-        YAMLTimePlayed.printYml(date, playerName, timePlayed);
+        long timePlayed = config.getLong(playerName) + playerWorldTimings.getTimeSpend();;
+
+
+
+        YAMLTimePlayed.printTime(date, playerName, timePlayed);
 
         PlayerWorldTimings.dispose(player.getUniqueId());
     }

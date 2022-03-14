@@ -1,11 +1,13 @@
 package me.marvin.api;
 
+import org.bukkit.Bukkit;
+
 import java.util.HashMap;
 import java.util.UUID;
 
 public class PlayerWorldTimings<staic> {
 
-    public static final long FARMWORLD_TIME_LIMIT = 1000 * 60 * 30; // 30min
+    public static final long TIME_LIMIT = 1000 * 60 * 10; // 10min
 
     private static HashMap<UUID, PlayerWorldTimings> cache = new HashMap<>();
 
@@ -52,13 +54,16 @@ public class PlayerWorldTimings<staic> {
 
     public void stopCounting() {
         this.started = false;
-        this.timeSpend += System.currentTimeMillis() - this.timing;
+        this.timeSpend += System.currentTimeMillis() - this.timing; //TODO Original: this.timeSpend += System.currentTimeMillis() - this.timing
         this.timing = 0L;
     }
 
     public long getTimeSpend() {
         if(this.started) {
-            return timeSpend += System.currentTimeMillis() - this.timing;
+            Bukkit.broadcastMessage("timeSpend: "+timeSpend);
+            Bukkit.broadcastMessage("this.timing: "+this.timing);
+            Bukkit.broadcastMessage("System.currentTimeMillis: "+System.currentTimeMillis());
+            return timeSpend -=  this.timing - System.currentTimeMillis(); //TODO Original: return timeSpend = System.currentTimeMillis() - this.timing;
         } else {
             return timeSpend;
         }

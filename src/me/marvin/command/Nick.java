@@ -17,18 +17,23 @@ public class Nick implements CommandExecutor {
         String playerName = player.getName();
 
         if (player.hasPermission("empire.leader")) {
-            File playersFile2 = new File("plugins/Players/", playerName + ".yml");
-            YamlConfiguration config2 = YamlConfiguration.loadConfiguration(playersFile2);
-            String team2 = config2.getString("Team");
-
-            File playersFile1 = new File("plugins/Players/", args[0] + ".yml");
-            YamlConfiguration config1 = YamlConfiguration.loadConfiguration(playersFile1);
-            String team1 = config1.getString("Team");
 
             if (!(args.length == 2)) {
                 commandSender.sendMessage("Error! Nutze /nick SPIELERNAME NICKNAME");
                 return false;
             }
+
+            File playersFile2 = new File("plugins/Novorex/Players/", playerName + ".yml");
+            YamlConfiguration config2 = YamlConfiguration.loadConfiguration(playersFile2);
+            String team2 = config2.getString("Team");
+
+            File playersFile1 = new File("plugins/Novorex/Players/", args[0] + ".yml");
+            YamlConfiguration config1 = YamlConfiguration.loadConfiguration(playersFile1);
+            String team1 = config1.getString("Team");
+
+            //Todo Nutze:             Player target = Bukkit.getPlayer(args[0]);
+            //            target.hasPermission("test");
+
             if (!team1.equals(team2)) {
                 commandSender.sendMessage("Error! Du musst im gleichen Team sein!");
                 return false;

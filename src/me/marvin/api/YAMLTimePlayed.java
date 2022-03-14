@@ -6,8 +6,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class YAMLTimePlayed {
-    public static void printYml(String fileName, String name, String value) {
-        File generalFile = new File("plugins/Novorex/General/TimePlayed/", fileName + ".yml");
+    public static void printTime(String date, String playerName, long time) {
+        File generalFile = new File("plugins/Novorex/General/TimePlayed/", date + ".yml");
         File directory = new File("plugins/Novorex/General/TimePlayed/");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(generalFile);
         directory.mkdirs();
@@ -18,7 +18,7 @@ public class YAMLTimePlayed {
                 exception.printStackTrace();
             }
         }
-        config.set(name,value);
+        config.set(playerName,time);
         try {
             config.save(generalFile);
         } catch (IOException e) {

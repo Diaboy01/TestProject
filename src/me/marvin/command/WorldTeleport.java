@@ -7,7 +7,6 @@ import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class WorldTeleport implements CommandExecutor {
@@ -35,7 +34,7 @@ public class WorldTeleport implements CommandExecutor {
                 commandSender.sendMessage("Error! Nutze: /wtp SPIELERNAME WELTNAME");
             }
             if (args.length == 2) {
-                //TODO
+                //TODO /wtp über Console
                 commandSender.sendMessage("Coming soon!");
             }
         }
