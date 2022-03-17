@@ -1,11 +1,12 @@
 package me.marvin.api;
 
-import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class PlayerWorldTimings<staic> {
+public class PlayerWorldTimings {
 
     public static final long TIME_LIMIT = 1000 * 60 * 10; // 10min
 
@@ -16,7 +17,11 @@ public class PlayerWorldTimings<staic> {
             return cache.get(uuid);
         }
 
-        return createEntry(uuid, 0L);
+        String date = Utils.getDate();
+        File generalFile = new File("plugins/Novorex/General/TimePlayed/", date + ".yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(generalFile);
+
+        return createEntry(uuid, config.getLong(uuid.toString()));
     }
 
     public static void dispose(UUID uuid) {
@@ -54,20 +59,17 @@ public class PlayerWorldTimings<staic> {
 
     public void stopCounting() {
         this.started = false;
-        this.timeSpend += System.currentTimeMillis() - this.timing; //TODO Original: this.timeSpend += System.currentTimeMillis() - this.timing
+        this.timeSpend += System.currentTimeMillis() - this.timing;
         this.timing = 0L;
     }
 
     public long getTimeSpend() {
         if(this.started) {
-            Bukkit.broadcastMessage("3");
-            Bukkit.broadcastMessage("timeSpend: "+timeSpend);
-            Bukkit.broadcastMessage("this.timing: "+this.timing);
-            Bukkit.broadcastMessage("System.currentTimeMillis: "+System.currentTimeMillis());
-            return timeSpend =  System.currentTimeMillis() - this.timing; //TODO Original: return timeSpend = System.currentTimeMillis() - this.timing;
-        } else {
-            return timeSpend;
+            this.timeSpend += System.currentTimeMillis() - this.timing;
+            this.timing = System.currentTimeMillis();
         }
+
+        return this.timeSpend;
     }
 
     public boolean exceedsTimeLimit(long timeLimit) {

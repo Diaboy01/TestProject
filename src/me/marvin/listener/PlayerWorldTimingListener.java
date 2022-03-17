@@ -13,6 +13,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class PlayerWorldTimingListener implements Listener {
@@ -22,6 +24,8 @@ public class PlayerWorldTimingListener implements Listener {
     static File generalFile1 = new File("plugins/Novorex/General/","Welten.yml");
     static YamlConfiguration config1 = YamlConfiguration.loadConfiguration(generalFile1);
     private static final String FALLBACK_WORLD = "world", FARMWORLD = config1.getString("Farmwelt");
+
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("mm:ss");
 
     static {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.instance, new Runnable() {
@@ -46,30 +50,13 @@ public class PlayerWorldTimingListener implements Listener {
                     PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
 
                     if(playerWorldTimings.isCounting()) {
-                        String date = Utils.getDate();
-                        Bukkit.broadcastMessage("1");
-                        Bukkit.broadcastMessage("PlayerWorldTimings.TIME_LIMIT: "+PlayerWorldTimings.TIME_LIMIT);
                         long time = PlayerWorldTimings.TIME_LIMIT - playerWorldTimings.getTimeSpend();
-                        Bukkit.broadcastMessage("time: "+time);
-                        Bukkit.broadcastMessage("2");
 
                         if (time < 60000) {
                             player.sendMessage("Achtung! Du hast noch Spielzeit 1 Minute in der Farmwelt, setze ein Home um deine Postion in der Farmwelt zu speichern! Mit: /sethome");
                         }
 
-                        int s = 0, m = 0;
-
-                        while(time >= 1000) {
-                            time -= 1000;
-                            s++;
-                        }
-
-                        while(s >= 60) {
-                            s -= 60;
-                            m++;
-                        }
-
-                        player.sendActionBar("Verbleibende Spielzeit: " + m + ":" + s );
+                        player.sendActionBar("Verbleibende Spielzeit: §a" + FORMAT.format(time));
 
                         if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
                             player.teleport(Bukkit.getWorld(FALLBACK_WORLD).getSpawnLocation());
@@ -86,21 +73,7 @@ public class PlayerWorldTimingListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        String playerName = player.getName();
-
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
-
-        String date = Utils.getDate();
-
-        File generalFile = new File("plugins/Novorex/General/TimePlayed/", date + ".yml");
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(generalFile);
-
-
-        long timePlayed = config.getLong(playerName);
-
-        player.sendMessage(String.valueOf("timePlayed config.getLong: " + timePlayed));
-
-        playerWorldTimings.appendData(timePlayed);
 
         World world = player.getWorld();
         if(!(world.getName().equalsIgnoreCase(FALLBACK_WORLD))) {
@@ -139,19 +112,10 @@ public class PlayerWorldTimingListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        String playerName = player.getName();
         String date = Utils.getDate();
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
 
-        File generalFile = new File("plugins/General/TimePlayed/", date + ".yml");
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(generalFile);
-
-        long timePlayed = config.getLong(playerName) + playerWorldTimings.getTimeSpend();;
-
-
-
-        YAMLTimePlayed.printTime(date, playerName, timePlayed);
-
+        YAMLTimePlayed.printTime(date, player.getUniqueId().toString(), playerWorldTimings.getTimeSpend());
         PlayerWorldTimings.dispose(player.getUniqueId());
     }
 }

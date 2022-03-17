@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class YAMLTimePlayed {
+
     public static void printTime(String date, String playerName, long time) {
         File generalFile = new File("plugins/Novorex/General/TimePlayed/", date + ".yml");
         File directory = new File("plugins/Novorex/General/TimePlayed/");

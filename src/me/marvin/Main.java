@@ -3,6 +3,9 @@ package me.marvin;
 import me.marvin.command.*;
 import me.marvin.listener.*;
 import org.bukkit.*;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -65,10 +68,20 @@ public class Main extends JavaPlugin {
         new Location(world, 0, 64, 0).getBlock().setType(Material.GRASS);
         world.setSpawnLocation(0, 66, 0);
         */
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            PlayerJoinEvent playerJoinEvent = new PlayerJoinEvent(player, null);
+            Bukkit.getPluginManager().callEvent(playerJoinEvent);
+        }
     }
 
     @Override
     public void onDisable() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            PlayerQuitEvent playerQuitEvent = new PlayerQuitEvent(player, null);
+            Bukkit.getPluginManager().callEvent(playerQuitEvent);
+        }
+
         super.onDisable();
     }
 }
