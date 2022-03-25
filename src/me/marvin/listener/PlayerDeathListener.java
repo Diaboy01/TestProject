@@ -1,5 +1,7 @@
 package me.marvin.listener;
 
+import me.marvin.api.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,12 +17,13 @@ import java.util.Date;
 public class PlayerDeathListener implements Listener {
     private FileWriter fileWriter;
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("[dd.MM.yyyy HH:mm:ss]");
+    String date = Utils.getDate();
 
     public PlayerDeathListener() {
-        File directory = new File("plugins/Novorex/Logs/");
+        File directory = new File("plugins/Novorex/Logs/" + date + "/");
         directory.mkdirs();
 
-        File deathLogFile = new File("plugins/Novorex/Logs/", "death.log");
+        File deathLogFile = new File("plugins/Novorex/Logs/" + date + "/", "death.log");
         if(!deathLogFile.exists()) {
             try {
                 deathLogFile.createNewFile();
@@ -54,5 +57,8 @@ public class PlayerDeathListener implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         printDeath(event.getEntity(), event.getEntity().getLocation(), event.getDeathMessage());
+        Player p = event.getEntity();
+        Bukkit.dispatchCommand(p,"/near"); //Klappt das?
+
     }
 }

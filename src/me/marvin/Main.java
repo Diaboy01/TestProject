@@ -33,6 +33,7 @@ public class Main extends JavaPlugin {
         pluginManager.registerEvents(new PlayerDeathListener(), this);
         pluginManager.registerEvents(new ChatListener(), this);
         pluginManager.registerEvents(new PlayerWorldTimingListener(), this);
+        pluginManager.registerEvents(new PlayerExtraDamageListener(), this);
 
         getCommand("add").setExecutor(new AddLeader());
         getCommand("invite").setExecutor(new Invite());
@@ -41,6 +42,10 @@ public class Main extends JavaPlugin {
         getCommand("nick").setExecutor(new Nick());
         getCommand("farmwelt").setExecutor(new Farmwelt());
         getCommand("wtp").setExecutor(new WorldTeleport());
+        getCommand("modifydamage").setExecutor(new PlayerDamageCommand());
+        getCommand("teambase").setExecutor(new SetTeamBase());
+
+        //new PlayerDamageCommand();
 
 
         /*
