@@ -56,9 +56,12 @@ public class PlayerDeathListener implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        printDeath(event.getEntity(), event.getEntity().getLocation(), event.getDeathMessage());
-        Player p = event.getEntity();
-        Bukkit.dispatchCommand(p,"/near"); //Klappt das?
-
+        String world = String.valueOf(event.getEntity().getWorld());
+        if (world == "world") {
+            printDeath(event.getEntity(), event.getEntity().getLocation(), event.getDeathMessage());
+            Player p = event.getEntity();
+            Bukkit.dispatchCommand(p, "/near"); //Klappt das?
+            //TODO Nearest Player in Log Speicher
+        }
     }
 }

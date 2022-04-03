@@ -1,7 +1,9 @@
 package me.marvin.listener;
 
 import me.marvin.Main;
-import me.marvin.api.*;
+import me.marvin.api.PlayerWorldTimings;
+import me.marvin.api.Utils;
+import me.marvin.api.YAMLTimePlayed;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,7 +16,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 public class PlayerWorldTimingListener implements Listener {
@@ -23,7 +24,7 @@ public class PlayerWorldTimingListener implements Listener {
 
     static File generalFile1 = new File("plugins/Novorex/General/","Welten.yml");
     static YamlConfiguration config1 = YamlConfiguration.loadConfiguration(generalFile1);
-    private static final String FALLBACK_WORLD = "world", FARMWORLD = config1.getString("Farmwelt");
+    private static final String Bauwelt = "world";
 
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("mm:ss");
 
@@ -59,7 +60,7 @@ public class PlayerWorldTimingListener implements Listener {
                         player.sendActionBar("Verbleibende Spielzeit: §a" + FORMAT.format(time));
 
                         if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
-                            player.teleport(Bukkit.getWorld(FALLBACK_WORLD).getSpawnLocation());
+                            player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
                             //TODO zum Team Warp Teleportieren
                             playerWorldTimings.stopCounting();
                         }
@@ -76,9 +77,9 @@ public class PlayerWorldTimingListener implements Listener {
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
 
         World world = player.getWorld();
-        if(!(world.getName().equalsIgnoreCase(FALLBACK_WORLD))) {
+        if(!(world.getName().equalsIgnoreCase(Bauwelt))) {
             if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
-                player.teleport(Bukkit.getWorld(FALLBACK_WORLD).getSpawnLocation());
+                player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
                 //TODO zum Team Warp Teleportieren
             } else {
                 playerWorldTimings.startCounting();
@@ -94,7 +95,7 @@ public class PlayerWorldTimingListener implements Listener {
         World worldFrom = event.getFrom();
 
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
-        if(worldTo.getName().equalsIgnoreCase(FALLBACK_WORLD)) {
+        if(worldTo.getName().equalsIgnoreCase(Bauwelt)) {
             if(playerWorldTimings.isCounting()) {
                 playerWorldTimings.stopCounting();
             }

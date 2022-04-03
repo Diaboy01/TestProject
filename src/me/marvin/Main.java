@@ -34,6 +34,7 @@ public class Main extends JavaPlugin {
         pluginManager.registerEvents(new ChatListener(), this);
         pluginManager.registerEvents(new PlayerWorldTimingListener(), this);
         pluginManager.registerEvents(new PlayerExtraDamageListener(), this);
+        pluginManager.registerEvents(new ExplosionListener(), this);
 
         getCommand("add").setExecutor(new AddLeader());
         getCommand("invite").setExecutor(new Invite());

@@ -44,51 +44,11 @@ public class SetTeamBase implements CommandExecutor {
                 e.printStackTrace();
             }
             Bukkit.dispatchCommand(console, "lp user " + playerName + " permission unset essentials.setwarp");
+
             Bukkit.dispatchCommand(console, "say " + team + "");
 
-            int r = Integer.parseInt(args[0]);
+            //TODO Team Gebiet mit Radius
 
-            int X = (int) player.getLocation().getX();
-            int Y = (int) player.getLocation().getY();
-            int Z = (int) player.getLocation().getZ();
-
-            int x1 = X + r;
-            int x2 = X - r;
-            int y1 = Y + r;
-            int y2 = Y - r;
-            int z1 = Z + r;
-            int z2 = Z - r;
-
-            //pos1 0,100,0
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Bukkit.dispatchCommand(console, "lp user " + playerName + " permission set worldedit.selection.pos");
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Bukkit.dispatchCommand(player,"/pos1 " + x1 + "," + y1 + "," + z1);
-            Bukkit.dispatchCommand(player,"/pos2 " + x2 + "," + y2 + "," + z2);
-            Bukkit.dispatchCommand(console, "lp user " + playerName + " permission set worldguard.region.define");
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Bukkit.dispatchCommand(player,"rg define " + team);
-            Bukkit.dispatchCommand(console, "lp user " + playerName + " permission unset worldedit.selection.pos");
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Bukkit.dispatchCommand(console, "lp user " + playerName + " permission unset worldguard.region.define");
-            Bukkit.dispatchCommand(console, "rg flag " + team + " -w world console-command-on-entry /say " + team); //TODO Bauwelt = world?
-            player.sendMessage("Fertig!");
         }
         return true;
     }
