@@ -4,6 +4,9 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_12_R1.IChatBaseComponent;
 import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
@@ -26,20 +29,41 @@ public class PlayerJoinListener implements Listener {
         Player player = event.getPlayer();
         String playerName = player.getName();
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-
-        if(player.hasPlayedBefore()) {
-            player.sendMessage("§aWillkoomen zurück!");
-        } else {
-            player.sendMessage("§aHerzlich Willkommen!");
-            Bukkit.dispatchCommand(console, "scoreboard teams join - " + playerName);
-            printYml(playerName, "Team", "-");
-        }
-
+        World world = Bukkit.getWorld("world");
 
         File playersFile = new File("plugins/Novorex/Players/", playerName + ".yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
 
         String teamName = config.getString("Team");
+
+        if(player.hasPlayedBefore()) {
+            world.setDifficulty(Difficulty.PEACEFUL);
+            Bukkit.dispatchCommand(console, "gamerule naturalRegeneration false");
+            player.sendMessage("§a Normal Join");
+            player.sendMessage("Dein Team: " + teamName);
+            Bukkit.dispatchCommand(console, "scoreboard teams add " + teamName);
+            Bukkit.dispatchCommand(console, "scoreboard teams join " + teamName + " " + playerName);
+            //        if (w == "world") {
+            //            player.sendMessage("Achtung! PvP ist in dieser Welt verboten! " + w);
+            //        } else {
+            //            player.sendMessage("Achtung! PvP ist in dieser Welt erlaubt! " + w);
+            //        }
+            //TELLRAW:
+            //Bukkit.dispatchCommand(console, "tellraw @a ["",{"text":"Server Sponsor: ","bold":true,"italic":true,"color":"gold"},{"text":"Nitrado.net","bold":true,"italic":true,"underlined":true,"color":"gold","clickEvent":{"action":"open_url","value":"https://nitra.do/KevinFilmt"}}] ");
+        } else {
+            player.sendMessage("§a First Join");
+            player.getInventory().clear();
+            //for(int i = 0; i < 35; i++){
+            //player.getInventory().setItem(i, null);
+            //}
+            player.teleport(new Location(world, 0, 100, 0));
+            Bukkit.dispatchCommand(console, "scoreboard teams add - ");
+            Bukkit.dispatchCommand(console, "scoreboard teams join - " + playerName);
+            printYml(playerName, "Team", "-");
+        }
+
+
+
         String p = String.format("%s", teamName);
         if (p == null) {
             p = "";
