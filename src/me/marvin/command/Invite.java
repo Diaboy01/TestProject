@@ -23,10 +23,10 @@ public class Invite implements CommandExecutor, TabCompleter {
                 File playersFile = new File("plugins/Novorex/Players/", playerName + ".yml");
                 YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
                 String teamName = config.getString("Team");
-                if (teamName.matches("-")) {
-                    commandSender.sendMessage("Error! Du benötigst ein eigenes Team!");
-                    return true;
-                }
+                //  if (teamName.matches("-")) {
+                //      commandSender.sendMessage("Error! Du benötigst ein eigenes Team!");
+                //       return true;
+                //   }
                 if (args.length != 1) {
                     commandSender.sendMessage("Error! Nutze: /invite SPIELERNAME");
                     return true;

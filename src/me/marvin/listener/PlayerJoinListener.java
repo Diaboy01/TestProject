@@ -95,12 +95,12 @@ public class PlayerJoinListener implements Listener {
             return;
         }
 
-            if(player.isOp()) {
-                player.setPlayerListName("§r§l" + prefix + " " + player.getDisplayName() + " " + suffix + "");
-                setTag(player, "Test");
+        //TODO Rolle auf TAB entfernen / nur Clan + Name
+
+        if(player.isOp()) {
+                player.setPlayerListName("§r§l" + prefix + "" + player.getDisplayName());
             } else {
-                setTag(player,"Test");
-                player.setPlayerListName("§r" + prefix + " " + player.getDisplayName() + " " + suffix + "");
+                player.setPlayerListName("§r" + prefix + "" + player.getDisplayName());
             }
 
 
@@ -118,7 +118,6 @@ public class PlayerJoinListener implements Listener {
         }, 60L); //60 Tick = 3s
         */
     }
-    //TODO setTag() geht net :(
     private void setTag2(Player player, String name) {
         try {
 

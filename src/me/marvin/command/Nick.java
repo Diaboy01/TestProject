@@ -16,6 +16,7 @@ public class Nick implements CommandExecutor {
         Player player = (Player) commandSender;
         String playerName = player.getName();
 
+        //TODO Nick entfernen!
         if (player.hasPermission("empire.leader")) {
 
             if (!(args.length == 2)) {
@@ -33,6 +34,8 @@ public class Nick implements CommandExecutor {
 
             //Todo Nutze:             Player target = Bukkit.getPlayer(args[0]);
             //            target.hasPermission("test");
+
+
 
             if (!team1.equals(team2)) {
                 commandSender.sendMessage("Error! Du musst im gleichen Team sein!");

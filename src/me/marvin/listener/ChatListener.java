@@ -26,6 +26,7 @@ public class ChatListener implements Listener
         File playersFile = new File("plugins/Novorex/Players/", playerName + ".yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
 
+        //TODO Rolle für Spieler Name + Nick entfernen!
         String teamName = config.getString("Team");
         String prefix = null;
         if (teamName.matches("-")) {
@@ -59,17 +60,17 @@ public class ChatListener implements Listener
             }
             ++i;
             if (distance > 15.0) {
-                target.sendMessage("§f" + prefix + " " + player.getDisplayName() + " " + suffix + "§8➝ §o§7§k#§r§7§o" + randomizeMessage(event.getMessage()) + "§7§k#");
+                target.sendMessage("§f" + suffix + "" + player.getDisplayName() + " " + "§8➝ §o§7§k#§r§7§o" + randomizeMessage(event.getMessage()) + "§7§k#");
             }
             else {
-                target.sendMessage("§f" + prefix + " " + player.getDisplayName() + " " + suffix + "§8➝ §7" + event.getMessage());
+                target.sendMessage("§f" + suffix + "" + player.getDisplayName() + " " + "§8➝ §7" + event.getMessage());
             }
         }
         if (i == 0) {
             player.sendMessage("§cDich hat leider niemand geh\u00f6rt.");
         }
         else {
-            player.sendMessage("§f" + prefix + " " + player.getDisplayName() + " " + suffix + "§8➝ §7" + event.getMessage());
+            player.sendMessage("§f" + suffix + "" + player.getDisplayName() + " " + "§8➝ §7" + event.getMessage());
         }
     }
 
