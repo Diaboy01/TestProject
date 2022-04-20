@@ -12,7 +12,7 @@ public class PlayerExtraDamageListener implements Listener
     public void onPlayerDamage(final EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
             final Player player = (Player)event.getEntity();
-            final double health = player.getMaxHealth();
+            final double health = player.getHealth();
             final double value = PlayerDamageCommand.getValue();
             if (value == -1.0) {
                 return;

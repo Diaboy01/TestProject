@@ -1,5 +1,8 @@
 package me.marvin.listener;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.player.PlayerTeleportEvent;
         import org.bukkit.event.EventHandler;
         import org.bukkit.entity.Player;
@@ -28,7 +31,18 @@ public class PortalListener implements Listener {
     @EventHandler
     public void PlayerTeleport(final PlayerTeleportEvent event) {
         final Player player = event.getPlayer();
-        String world = String.valueOf(event.getTo().getWorld());
+        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+        String w = String.valueOf(event.getTo().getWorld());
+        if (w == "world") {
+            player.sendMessage("Achtung! PvP ist in dieser Welt verboten! " + w);
+        } else {
+            player.sendMessage("Achtung! PvP ist in dieser Welt erlaubt! " + w);
+        }
+        World world = Bukkit.getWorld(w);
+        world.setDifficulty(Difficulty.HARD);
+        Bukkit.dispatchCommand(console, "gamerule naturalRegeneration false");
+        World Bauwelt = Bukkit.getWorld("world");
+        Bauwelt.setDifficulty(Difficulty.PEACEFUL);
 
         if (event.getTo().getWorld().getEnvironment() == World.Environment.NETHER) {
             if (!player.hasPermission("world.NETHER")) {

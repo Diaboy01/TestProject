@@ -34,7 +34,7 @@ public class Role implements CommandExecutor {
             YamlConfiguration config1 = YamlConfiguration.loadConfiguration(playersFile1);
             String team1 = config1.getString("Team");
 
-
+            //TODO Leader Permission abfragen!
             if (!team1.equals(team2)) {
                 commandSender.sendMessage("Error! Du musst im gleichen Team sein!");
                 return false;
