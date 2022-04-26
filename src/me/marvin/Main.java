@@ -35,12 +35,14 @@ public class Main extends JavaPlugin {
         pluginManager.registerEvents(new PlayerWorldTimingListener(), this);
         pluginManager.registerEvents(new PlayerExtraDamageListener(), this);
         pluginManager.registerEvents(new ExplosionListener(), this);
+        pluginManager.registerEvents(new PlayerLeaveListener(), this);
+        pluginManager.registerEvents(new PortalListener(), this);
 
         getCommand("add").setExecutor(new AddLeader());
         getCommand("invite").setExecutor(new Invite());
+        getCommand("accept").setExecutor(new Accept());
         getCommand("create").setExecutor(new CreateTeam());
         getCommand("role").setExecutor(new Role());
-        getCommand("nick").setExecutor(new Nick());
         getCommand("farmwelt").setExecutor(new Farmwelt());
         getCommand("wtp").setExecutor(new WorldTeleport());
         getCommand("modifydamage").setExecutor(new PlayerDamageCommand());
@@ -86,6 +88,7 @@ public class Main extends JavaPlugin {
         for (Player player : Bukkit.getOnlinePlayers()) {
             PlayerQuitEvent playerQuitEvent = new PlayerQuitEvent(player, null);
             Bukkit.getPluginManager().callEvent(playerQuitEvent);
+            player.kickPlayer("Server Plugin Update! Please rejoin!");
         }
 
         super.onDisable();

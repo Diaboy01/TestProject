@@ -3,6 +3,7 @@ package me.marvin.listener;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.player.PlayerTeleportEvent;
         import org.bukkit.event.EventHandler;
         import org.bukkit.entity.Player;
@@ -10,20 +11,35 @@ import org.bukkit.event.player.PlayerTeleportEvent;
         import org.bukkit.event.player.PlayerPortalEvent;
         import org.bukkit.event.Listener;
 
+import java.io.File;
+
 public class PortalListener implements Listener {
+
 
     @EventHandler
     public void PlayerPortal(final PlayerPortalEvent event) {
         final Player player = event.getPlayer();
-        if (event.getTo().getWorld().getEnvironment() == World.Environment.NETHER) {
-            if (!player.hasPermission("Portal.Nether")) {
-                event.setCancelled(true);
-                player.sendMessage("You don't have permissions to go to the Nether!");
-            }
-        }
-        else if (event.getTo().getWorld().getEnvironment() == World.Environment.THE_END && !player.hasPermission("Portal.End")) {
+        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+        World world = event.getTo().getWorld();
+        String w = world.getName();
+
+        world.setDifficulty(Difficulty.HARD);
+        world.setGameRuleValue("naturalRegeneration", "false");
+        World Bauwelt = Bukkit.getWorld("world");
+        Bauwelt.setDifficulty(Difficulty.PEACEFUL);
+
+        File generalFile = new File("plugins/Novorex/General/", "Farmwelt.yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(generalFile);
+
+        String farmworld = config.getString("Farmwelt");
+
+        if (!(player.hasPermission("world.all")) && !(w.equals("world") || w.equals(farmworld))) {
             event.setCancelled(true);
-            player.sendMessage("&4You don't have permissions to go to the End!");
+            player.sendMessage("Welt/Dimension ist noch gesperrt!");
+        } else if (w.equals("world")) {
+            player.sendMessage("§cAchtung! PVP ist in dieser Welt verboten!");
+        } else {
+            player.sendMessage("§cAchtung! PVP ist in dieser Welt erlaubt!");
         }
     }
 
@@ -32,35 +48,26 @@ public class PortalListener implements Listener {
     public void PlayerTeleport(final PlayerTeleportEvent event) {
         final Player player = event.getPlayer();
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-        String w = String.valueOf(event.getTo().getWorld());
-        if (w == "world") {
-            player.sendMessage("Achtung! PvP ist in dieser Welt verboten! " + w);
-        } else {
-            player.sendMessage("Achtung! PvP ist in dieser Welt erlaubt! " + w);
-        }
-        World world = Bukkit.getWorld(w);
+        World world = event.getTo().getWorld();
+        String w = world.getName();
         world.setDifficulty(Difficulty.HARD);
-        Bukkit.dispatchCommand(console, "gamerule naturalRegeneration false");
+        world.setGameRuleValue("naturalRegeneration", "false");
         World Bauwelt = Bukkit.getWorld("world");
         Bauwelt.setDifficulty(Difficulty.PEACEFUL);
 
-        if (event.getTo().getWorld().getEnvironment() == World.Environment.NETHER) {
-            if (!player.hasPermission("world.NETHER")) {
-                event.setCancelled(true);
-                player.sendMessage("You don't have permissions to go to the Nether!");
-            }
-        } else if (event.getTo().getWorld().getEnvironment() == World.Environment.THE_END) {
-            if (!player.hasPermission("world.THE_END")) {
-                event.setCancelled(true);
-                player.sendMessage("You don't have permissions to go to the End!");
-            }
-        } else if (!(event.getTo().getWorld().getEnvironment() == World.Environment.NORMAL)){
-            if (!player.hasPermission("world.UNNORMAL")) {
-                event.setCancelled(true);
-                player.sendMessage("You don't have permissions to go to this world/dimension!");
-            }
+        File generalFile = new File("plugins/Novorex/General/", "Farmwelt.yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(generalFile);
+
+        String farmworld = config.getString("Farmwelt");
+
+        if (!(player.hasPermission("world.all")) && !(w.equals("world") || w.equals(farmworld))) {
+            event.setCancelled(true);
+            player.sendMessage("Welt/Dimension ist noch gesperrt!");
+            //TODO Abfrage ob World event.getTo().getWorld(); und aktuelle Welt die gleichen sind/ob nicht
+        } else if (w.equals("world")) {
+            player.sendMessage("§cAchtung! PVP ist in dieser Welt verboten!");
+        } else {
+            player.sendMessage("§cAchtung! PVP ist in dieser Welt erlaubt!");
         }
-
-
     }
 }

@@ -1,6 +1,5 @@
 package me.marvin.listener;
 
-import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_12_R1.IChatBaseComponent;
 import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.Bukkit;
@@ -17,7 +16,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
 import static me.marvin.api.YAMLPlayers.printYml;
 
@@ -26,10 +25,21 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        String playerName = player.getName();
+
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+
+        Player player = event.getPlayer();
+        event.setJoinMessage("§fServer §8➝ §7 [+] " + player.getName());
+        String playerName = player.getName();
+
+        Bukkit.dispatchCommand(console,"tellraw " + playerName + " [\"\",{\"text\":\"Sponsor: \",\"italic\":true,\"color\":\"gold\"},{\"text\":\"Nitrado.net\",\"italic\":true,\"underlined\":true,\"color\":\"gold\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://nitra.do/KevinFilmt\"}}]");
+
+        World w = player.getWorld();
+        w.setDifficulty(Difficulty.HARD);
         World world = Bukkit.getWorld("world");
+        world.setGameRuleValue("naturalRegeneration", "false");
+        world.setDifficulty(Difficulty.PEACEFUL);
+
 
         File playersFile = new File("plugins/Novorex/Players/", playerName + ".yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
@@ -37,73 +47,66 @@ public class PlayerJoinListener implements Listener {
         String teamName = config.getString("Team");
 
         if(player.hasPlayedBefore()) {
+            //NORMAL JOIN
             world.setDifficulty(Difficulty.PEACEFUL);
-            Bukkit.dispatchCommand(console, "gamerule naturalRegeneration false");
-            player.sendMessage("§a Normal Join");
-            player.sendMessage("Dein Team: " + teamName);
+            world.setGameRuleValue("naturalRegeneration", "false");
             Bukkit.dispatchCommand(console, "scoreboard teams add " + teamName);
             Bukkit.dispatchCommand(console, "scoreboard teams join " + teamName + " " + playerName);
-            //        if (w == "world") {
-            //            player.sendMessage("Achtung! PvP ist in dieser Welt verboten! " + w);
-            //        } else {
-            //            player.sendMessage("Achtung! PvP ist in dieser Welt erlaubt! " + w);
-            //        }
-            //TELLRAW:
-            //Bukkit.dispatchCommand(console, "tellraw @a ["",{"text":"Server Sponsor: ","bold":true,"italic":true,"color":"gold"},{"text":"Nitrado.net","bold":true,"italic":true,"underlined":true,"color":"gold","clickEvent":{"action":"open_url","value":"https://nitra.do/KevinFilmt"}}] ");
+            Bukkit.dispatchCommand(console, "lp group s" + teamName + " permission set essentials.warps." + teamName);
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Bukkit.dispatchCommand(console, "lp group l" + teamName + " permission set essentials.warps." + teamName);
+            String wn = w.getName();
+            if (wn.equals("world")) {
+                player.sendMessage("§cAchtung! PVP ist in dieser Welt verboten!");
+            } else {
+                player.sendMessage("§cAchtung! PVP ist in dieser Welt erlaubt!");
+            }
         } else {
-            player.sendMessage("§a First Join");
-            player.getInventory().clear();
+            //FIRST JOIN
             //for(int i = 0; i < 35; i++){
             //player.getInventory().setItem(i, null);
             //}
-            player.teleport(new Location(world, 0, 100, 0));
+            player.teleport(new Location(world, -4, 70, -6));
             Bukkit.dispatchCommand(console, "scoreboard teams add - ");
             Bukkit.dispatchCommand(console, "scoreboard teams join - " + playerName);
             printYml(playerName, "Team", "-");
+            try {
+                TimeUnit.SECONDS.sleep(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Bukkit.dispatchCommand(console, "clear " + playerName);
+
         }
 
-
-
-        String p = String.format("%s", teamName);
-        if (p == null) {
-            p = "";
-        }
-        String prefix = p + " ";
-
-        String s = config.getString("Role");
-        if (s == null) {
-            s = "";
-        }
-        String suffix = s + " ";
-
-        String displayName = config.getString("Nick");
-        player.setDisplayName(displayName);
-
-        player.sendMessage("DisplayName: " + player.getDisplayName() + " Name: " + player.getName());
-        player.sendMessage("Teamname: " + teamName + " Teamname: " + teamName);
-        player.sendMessage("Prefix: " + prefix + " Suffix: " + suffix);
-
-        event.setJoinMessage("§f" + player.getName() + " §7hat den Server betreten!");
+        
 
         //player.teleport(Bukkit.getWorld(Main.GAME_WORLD_NAME).getSpawnLocation());
 
-        setTablistHeaderAndFooter(player, "Novorex Network", "Sponsor: Nitrado.net");
+        setTablistHeaderAndFooter(player, "§fMinecraft §bHEXXIT §fII", "§6by Novorex.net / §6§oSponsor: Nitrado.net");
 
 
-        if (teamName.matches("-")) {
-            player.setPlayerListName("§r\uD83D\uDC80✖ §o" + player.getDisplayName());
-            return;
-        }
-
-        //TODO Rolle auf TAB entfernen / nur Clan + Name
+        String p = String.format("%s", teamName);
+        String prefix = p + " ";
 
         if(player.isOp()) {
-                player.setPlayerListName("§r§l" + prefix + "" + player.getDisplayName());
+                player.setPlayerListName("§r§l#" + prefix + "" + player.getDisplayName());
             } else {
-                player.setPlayerListName("§r" + prefix + "" + player.getDisplayName());
+                player.setPlayerListName("§r#" + prefix + "" + player.getDisplayName());
             }
 
-
+        if (teamName.matches("-")) {
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            player.setPlayerListName("" + player.getDisplayName());
+        }
             /*
         Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) this, new Runnable() {
             @Override
@@ -118,48 +121,6 @@ public class PlayerJoinListener implements Listener {
         }, 60L); //60 Tick = 3s
         */
     }
-    private void setTag2(Player player, String name) {
-        try {
-
-            Method getHandle = player.getClass().getMethod("getHandle");
-            Object entityPlayer1 = getHandle.invoke(player);
-
-            GameProfile entityPlayer = ((CraftPlayer)player).getHandle().getProfile();
-
-            Field f = entityPlayer .getClass().getDeclaredField("name");
-            f.setAccessible(true);
-            f.set(entityPlayer, name);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void setTag(Player player, String tag) {
-
-        try {
-
-            Object nmsPlayer = player;
-            GameProfile profile = ((GameProfile) nmsPlayer.getClass().getMethod("getProfile").invoke(nmsPlayer));
-            Field name = profile.getClass().getDeclaredField("name");
-            name.setAccessible(true);
-            name.set(profile, tag);
-
-            for(Player pls : Bukkit.getOnlinePlayers()){
-
-                pls.hidePlayer(player);
-                pls.showPlayer(pls);
-
-            }
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-        }
-
-    }
-
     public void setTablistHeaderAndFooter(Player player, String h, String f) {
         PacketPlayOutPlayerListHeaderFooter packetPlayOutPlayerListHeaderFooter = new PacketPlayOutPlayerListHeaderFooter();
         IChatBaseComponent header = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + h + "\"}");

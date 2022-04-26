@@ -30,13 +30,7 @@ public class WorldTeleport implements CommandExecutor {
                 }
             }
         } else {
-            if (!(args.length == 2)) {
-                commandSender.sendMessage("Error! Nutze: /wtp SPIELERNAME WELTNAME");
-            }
-            if (args.length == 2) {
-                //TODO /wtp über Console
-                commandSender.sendMessage("Coming soon!");
-            }
+                commandSender.sendMessage("Error!");
         }
         return false;
     }

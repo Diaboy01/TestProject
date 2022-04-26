@@ -20,13 +20,16 @@ public class SetTeamBase implements CommandExecutor {
         String playerName = player.getName();
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
         String date = Utils.getDate();
+        if (player.hasPermission("*") || player.isOp()) {
+            commandSender.sendMessage("Achtung! Du bist * OP");
+        }
 
         if (player.hasPermission("empire.leader")) {
-            if (!(args.length == 1)) {
-            commandSender.sendMessage("Error! Nutze /teambase RADIUS");
+            if (!(args.length == 0)) {
+            commandSender.sendMessage("Error! Nutze /teambase");
             return false;
             }
-            player.sendMessage("Bitte warte kurz...");
+            player.sendMessage("Team Warp wird gesetzt!");
 
             File playersFile = new File("plugins/Novorex/Players/", playerName + ".yml");
             YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
@@ -36,16 +39,14 @@ public class SetTeamBase implements CommandExecutor {
             File generalFile = new File("plugins/Novorex/Logs/" + date + "/TeamBase/" + team + ".yml");
             YamlConfiguration config2 = YamlConfiguration.loadConfiguration(generalFile);
 
-            Bukkit.dispatchCommand(console, "lp user " + playerName + " permission set essentials.setwarp");
-            Bukkit.dispatchCommand(player,"setwarp " + team);
+            Bukkit.dispatchCommand(console, "lp user " + playerName + " permission settemp essentials.setwarp true 5s");
             try {
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.SECONDS.sleep(3);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Bukkit.dispatchCommand(console, "lp user " + playerName + " permission unset essentials.setwarp");
-
-            Bukkit.dispatchCommand(console, "say " + team + "");
+            player.chat("/setwarp " + team);
+            player.sendMessage("Momentan muss ein Teamgebiet noch mit Schildern und Zäunen deutlich gekennzeichnet werden!");
 
             //TODO Team Gebiet mit Radius
 

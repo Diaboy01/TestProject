@@ -1,6 +1,7 @@
 package me.marvin.command;
 
 import me.marvin.api.YAMLPlayers;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,7 +16,9 @@ public class Role implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         Player player = (Player) commandSender;
         String playerName = player.getName();
-
+        if (player.hasPermission("*") || player.isOp()) {
+            commandSender.sendMessage("Achtung! Du bist * OP");
+        }
         if (player.hasPermission("empire.leader")) {
 
             if (!(args.length == 2)) {
@@ -23,19 +26,9 @@ public class Role implements CommandExecutor {
                 return false;
             }
 
-            File playersFile2 = new File("plugins/Novorex/Players/", playerName + ".yml");
-            YamlConfiguration config2 = YamlConfiguration.loadConfiguration(playersFile2);
-            String team2 = config2.getString("Team");
-
-            //Todo Nutze:             Player target = Bukkit.getPlayer(args[0]);
-            //            target.hasPermission("test");
-
-            File playersFile1 = new File("plugins/Novorex/Players/", args[0] + ".yml");
-            YamlConfiguration config1 = YamlConfiguration.loadConfiguration(playersFile1);
-            String team1 = config1.getString("Team");
-
-            //TODO Leader Permission abfragen!
-            if (!team1.equals(team2)) {
+            Player target = Bukkit.getPlayer(args[0]);
+            if (!(target.hasPermission("essentials.warps." + args[0])) && (player.hasPermission("essentials.warps." + args[0])))
+            {
                 commandSender.sendMessage("Error! Du musst im gleichen Team sein!");
                 return false;
             }

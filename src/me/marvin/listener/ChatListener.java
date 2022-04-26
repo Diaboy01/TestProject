@@ -26,25 +26,11 @@ public class ChatListener implements Listener
         File playersFile = new File("plugins/Novorex/Players/", playerName + ".yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
 
-        //TODO Rolle für Spieler Name + Nick entfernen!
-        String teamName = config.getString("Team");
-        String prefix = null;
-        if (teamName.matches("-")) {
-            prefix = "§r✖§o";
-        }
-        if (!(teamName.matches("-"))) {
-            prefix = teamName + "";
-        }
 
-        String suffix = config.getString("Role");
-        if (suffix == null) {
-            suffix = "";
-        }
-        suffix = suffix + " ";
-
-        String displayName = config.getString("Nick");
-        player.setDisplayName(displayName);
-
+        String role = config.getString("Role");
+        if (role == null) {
+            role = "";
+        } else role = role + " ";
         int i = 0;
         event.setCancelled(true);
         for (final Player target : Bukkit.getOnlinePlayers()) {
@@ -60,17 +46,17 @@ public class ChatListener implements Listener
             }
             ++i;
             if (distance > 15.0) {
-                target.sendMessage("§f" + suffix + "" + player.getDisplayName() + " " + "§8➝ §o§7§k#§r§7§o" + randomizeMessage(event.getMessage()) + "§7§k#");
+                target.sendMessage("§f" + role + "" + player.getDisplayName() + " " + "§8➝ §o§7§k#§r§7§o" + randomizeMessage(event.getMessage()) + "§7§k#");
             }
             else {
-                target.sendMessage("§f" + suffix + "" + player.getDisplayName() + " " + "§8➝ §7" + event.getMessage());
+                target.sendMessage("§f" + role + "" + player.getDisplayName() + " " + "§8➝ §7" + event.getMessage());
             }
         }
         if (i == 0) {
             player.sendMessage("§cDich hat leider niemand geh\u00f6rt.");
         }
         else {
-            player.sendMessage("§f" + suffix + "" + player.getDisplayName() + " " + "§8➝ §7" + event.getMessage());
+            player.sendMessage("§f" + role + "" + player.getDisplayName() + " " + "§8➝ §7" + event.getMessage());
         }
     }
 

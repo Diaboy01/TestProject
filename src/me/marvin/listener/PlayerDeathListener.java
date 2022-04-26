@@ -3,6 +3,8 @@ package me.marvin.listener;
 import me.marvin.api.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,7 +49,7 @@ public class PlayerDeathListener implements Listener {
      */
     private void printDeath(Player player, Location deathLocation, String message) {
         try {
-            fileWriter.write(simpleDateFormat.format(new Date()) + " " + player.getName() + " wurde getötet [world=" + deathLocation.getWorld().getName() + ",x=" + deathLocation.getBlockX() + ",y=" + deathLocation.getBlockY() + ",z=" + deathLocation.getBlockZ() + "] (" + message + ")\n");
+            fileWriter.write(simpleDateFormat.format(new Date()) + "(+2) " + player.getName() + " died [Welt=" + deathLocation.getWorld().getName() + ",x=" + deathLocation.getBlockX() + ",y=" + deathLocation.getBlockY() + ",z=" + deathLocation.getBlockZ() + "] (" + message + ")\n");
             fileWriter.flush();
         } catch (IOException exception) {
             exception.printStackTrace();
@@ -56,12 +58,19 @@ public class PlayerDeathListener implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        String world = String.valueOf(event.getEntity().getWorld());
-        if (world == "world") {
+        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+        Player player = (Player) event.getEntity();
+        String world = player.getWorld().getName();
+        if (world.equals("world")) {
             printDeath(event.getEntity(), event.getEntity().getLocation(), event.getDeathMessage());
-            Player p = event.getEntity();
-            Bukkit.dispatchCommand(p, "/near"); //Klappt das?
-            //TODO Nearest Player in Log Speicher
+            Bukkit.dispatchCommand(console, "msg Diaboy01 Tod in Bauwelt!");
+        }
+        if (!(world.equals("world"))) {
+            if (event.getEntity() != null) {
+                Location deathloc = event.getEntity().getLocation().add(0.0, 0.0, 0.0);
+                World w = player.getWorld();
+                ((World) w).strikeLightningEffect(deathloc);
+            }
         }
     }
 }

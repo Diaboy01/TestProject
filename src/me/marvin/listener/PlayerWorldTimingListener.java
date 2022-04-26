@@ -20,10 +20,9 @@ import java.text.SimpleDateFormat;
 
 public class PlayerWorldTimingListener implements Listener {
 
-    //TODO Datei Welten.yml vorher erstellen in plugins/Novorex/General/ ?
 
-    static File generalFile1 = new File("plugins/Novorex/General/","Welten.yml");
-    static YamlConfiguration config1 = YamlConfiguration.loadConfiguration(generalFile1);
+    //static File generalFile1 = new File("plugins/Novorex/General/","Bauwelt.yml");
+    //static YamlConfiguration config1 = YamlConfiguration.loadConfiguration(generalFile1);
     private static final String Bauwelt = "world";
 
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("mm:ss");
@@ -53,7 +52,7 @@ public class PlayerWorldTimingListener implements Listener {
                     if(playerWorldTimings.isCounting()) {
                         long time = PlayerWorldTimings.TIME_LIMIT - playerWorldTimings.getTimeSpend();
 
-                        if (time < 60000) {
+                        if (time == 60000 || time == 60001) {
                             player.sendMessage("Achtung! Du hast noch Spielzeit 1 Minute in der Farmwelt, setze ein Home um deine Postion in der Farmwelt zu speichern! Mit: /sethome");
                         }
 
@@ -83,7 +82,6 @@ public class PlayerWorldTimingListener implements Listener {
                 //TODO zum Team Warp Teleportieren
             } else {
                 playerWorldTimings.startCounting();
-                //TODO Zum Farmwelt Home Spieler teleportieren (Abfrage/autmomtisch)
             }
         }
     }
@@ -106,7 +104,6 @@ public class PlayerWorldTimingListener implements Listener {
             player.teleport(worldFrom.getSpawnLocation());
         } else {
             playerWorldTimings.startCounting();
-            //TODO Zum Farmwelt Home Spieler teleportieren (Abfrage/autmomtisch)
         }
     }
 

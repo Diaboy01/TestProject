@@ -11,8 +11,8 @@ commands:
   invite:
   create:
   role:
-  nick:
   farmwelt:
   wtp:
   modifydamage:
   teambase:
+  accept:
