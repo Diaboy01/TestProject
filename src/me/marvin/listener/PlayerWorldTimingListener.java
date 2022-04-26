@@ -60,7 +60,6 @@ public class PlayerWorldTimingListener implements Listener {
 
                         if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
                             player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
-                            //TODO zum Team Warp Teleportieren
                             playerWorldTimings.stopCounting();
                         }
 
@@ -79,7 +78,6 @@ public class PlayerWorldTimingListener implements Listener {
         if(!(world.getName().equalsIgnoreCase(Bauwelt))) {
             if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
                 player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
-                //TODO zum Team Warp Teleportieren
             } else {
                 playerWorldTimings.startCounting();
             }
