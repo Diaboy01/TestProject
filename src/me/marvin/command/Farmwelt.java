@@ -59,8 +59,9 @@ public class Farmwelt implements CommandExecutor {
                 int randomChunkX = randomX / 16;
                 int randomChunkZ = randomZ / 16;
                 
-                ((CraftWorld) world).getHandle().getChunkProviderServer().getOrLoadChunkAt(randomChunkX, randomChunkZ);
-                Bukkit.getScheduler().runTaskLater(Main.instance, () -> player.teleport(world.getHighestBlockAt(randomX, randomZ).getLocation().add(0, 1, 0)), 20L);
+                ((CraftWorld) farm).getHandle().getChunkProviderServer().getOrLoadChunkAt(randomChunkX, randomChunkZ);
+                World finalFarm = farm;
+                Bukkit.getScheduler().runTaskLater(Main.instance, () -> player.teleport(finalFarm.getHighestBlockAt(randomX, randomZ).getLocation().add(0, 1, 0)), 20L);
                 player.setInvulnerable(true);
                 Bukkit.getScheduler().runTaskLater(Main.instance, () -> player.setInvulnerable(false), 20L * 15);
 
