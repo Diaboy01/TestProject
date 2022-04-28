@@ -29,11 +29,11 @@ public class Farmwelt implements CommandExecutor {
 
             World farm = Bukkit.getWorld(farmworld);
 
-            World world = player.getLocation().getWorld();
+            World world = player.getWorld();
 
             String w = world.getName();
 
-            if (w.equals("farmworld")) {
+            if (w.equals(farmworld)) {
                 commandSender.sendMessage("Du bist bereits in der Farmwelt!");
                 return false;
             }
