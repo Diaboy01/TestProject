@@ -29,7 +29,7 @@ public class Farmwelt implements CommandExecutor {
 
             World farm = Bukkit.getWorld(farmworld);
 
-            World world = player.getWorld();
+            World world = player.getLocation().getWorld();
 
             String w = world.getName();
 
