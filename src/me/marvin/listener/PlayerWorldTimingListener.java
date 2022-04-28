@@ -62,7 +62,6 @@ public class PlayerWorldTimingListener implements Listener {
                             player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
                             playerWorldTimings.stopCounting();
                         }
-
                     }
                 }
             }
@@ -109,9 +108,11 @@ public class PlayerWorldTimingListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         String date = Utils.getDate();
-        PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
 
+        PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
+        if(playerWorldTimings.isCounting()) playerWorldTimings.stopCounting();
         YAMLTimePlayed.printTime(date, player.getUniqueId().toString(), playerWorldTimings.getTimeSpend());
+
         PlayerWorldTimings.dispose(player.getUniqueId());
     }
 }

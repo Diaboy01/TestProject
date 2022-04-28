@@ -12,7 +12,6 @@ public class ExplosionListener implements Listener {
     @EventHandler
     public void onExplosionPrimeEvent(final ExplosionPrimeEvent e) {
         String world = String.valueOf(e.getEntity().getWorld().getName());
-        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
         if (world.equals("world")) {
             e.setCancelled(true);
         }
@@ -21,7 +20,6 @@ public class ExplosionListener implements Listener {
     @EventHandler
     public void onEntityExplodeEvent(final EntityExplodeEvent e) {
         String world = String.valueOf(e.getEntity().getWorld().getName());
-        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
         if (world.equals("world")) {
             e.setCancelled(true);
         }

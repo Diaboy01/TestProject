@@ -1,18 +1,17 @@
 package me.marvin.command;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
+import me.marvin.Main;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
+import java.util.Random;
 
 
 public class Farmwelt implements CommandExecutor {
@@ -51,15 +50,46 @@ public class Farmwelt implements CommandExecutor {
                     farm = WorldCreator.name(farmworld).createWorld();
                     Bukkit.createWorld(new WorldCreator(farmworld));
                 };
-                player.teleport(new Location(farm, 0, 150, 0));
+
+                Random random = new Random();
+
+                int randomX = random.nextInt(500 + 20) + 20;
+                int randomZ = random.nextInt(500 + 20) + 20;
+
+                int randomChunkX = randomX / 16;
+                int randomChunkZ = randomZ / 16;
+                
+                ((CraftWorld) world).getHandle().getChunkProviderServer().getOrLoadChunkAt(randomChunkX, randomChunkZ);
+                Bukkit.getScheduler().runTaskLater(Main.instance, () -> player.teleport(world.getHighestBlockAt(randomX, randomZ).getLocation().add(0, 1, 0)), 20L);
+                player.setInvulnerable(true);
+                Bukkit.getScheduler().runTaskLater(Main.instance, () -> player.setInvulnerable(false), 20L * 15);
+
+               // int randomX = random.nextInt(500 + 20) + 20;
+               // int randomZ = random.nextInt(500 + 20) + 20;
+
+               // int randomChunkX = randomX / 16;
+
+               // int randomChunkZ = randomZ / 16;
+
+                /*
+                Chunk chunk = farm.getChunkAt(0,0);
+
+                chunk.load();
+
                 Bukkit.dispatchCommand(console, "god " + playerName + " enable");
-                Bukkit.dispatchCommand(console, "spreadplayers 0 0 200 500 true " + playerName);
+
+
+                player.teleport(new Location(farm, 0, 255, 0));
+                Bukkit.dispatchCommand(console, "spreadplayers 0 0 10 25 true " + playerName);
+
                 try {
-                    TimeUnit.SECONDS.sleep(10);
+                    TimeUnit.SECONDS.sleep(15);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
                 Bukkit.dispatchCommand(console, "god " + playerName + " disable");
+                */
             }
         }
     } else {

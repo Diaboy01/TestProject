@@ -19,7 +19,6 @@ public class PortalListener implements Listener {
     @EventHandler
     public void PlayerPortal(final PlayerPortalEvent event) {
         final Player player = event.getPlayer();
-        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
         World world = event.getTo().getWorld();
         String w = world.getName();
 
@@ -47,11 +46,10 @@ public class PortalListener implements Listener {
     @EventHandler
     public void PlayerTeleport(final PlayerTeleportEvent event) {
         final Player player = event.getPlayer();
-        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-        World world = event.getTo().getWorld();
-        String w = world.getName();
-        world.setDifficulty(Difficulty.HARD);
-        world.setGameRuleValue("naturalRegeneration", "false");
+        World goToWorld = event.getTo().getWorld();
+        String playerWorld = goToWorld.getName();
+        goToWorld.setDifficulty(Difficulty.HARD);
+        goToWorld.setGameRuleValue("naturalRegeneration", "false");
         World Bauwelt = Bukkit.getWorld("world");
         Bauwelt.setDifficulty(Difficulty.PEACEFUL);
 
@@ -60,14 +58,15 @@ public class PortalListener implements Listener {
 
         String farmworld = config.getString("Farmwelt");
 
-        if (!(player.hasPermission("world.all")) && !(w.equals("world") || w.equals(farmworld))) {
-            event.setCancelled(true);
-            player.sendMessage("Welt/Dimension ist noch gesperrt!");
-            //TODO Abfrage ob World event.getTo().getWorld(); und aktuelle Welt die gleichen sind/ob nicht
-        } else if (w.equals("world")) {
-            player.sendMessage("§cAchtung! PVP ist in dieser Welt verboten!");
-        } else {
-            player.sendMessage("§cAchtung! PVP ist in dieser Welt erlaubt!");
+        if(!event.getTo().getWorld().equals(event.getFrom().getWorld())) {
+            if (!(player.hasPermission("goToWorld.all")) && !(playerWorld.equals("world") || playerWorld.equals(farmworld))) {
+                event.setCancelled(true);
+                player.sendMessage("Welt/Dimension ist noch gesperrt!");
+            } else if (playerWorld.equals("goToWorld")) {
+                player.sendMessage("§cAchtung! PVP ist in dieser Welt verboten!");
+            } else {
+                player.sendMessage("§cAchtung! PVP ist in dieser Welt erlaubt!");
+            }
         }
     }
 }

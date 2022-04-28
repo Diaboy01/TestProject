@@ -1,5 +1,6 @@
 package me.marvin.listener;
 
+import me.marvin.Main;
 import net.minecraft.server.v1_12_R1.IChatBaseComponent;
 import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.Bukkit;
@@ -34,12 +35,11 @@ public class PlayerJoinListener implements Listener {
 
         Bukkit.dispatchCommand(console,"tellraw " + playerName + " [\"\",{\"text\":\"Sponsor: \",\"italic\":true,\"color\":\"gold\"},{\"text\":\"Nitrado.net\",\"italic\":true,\"underlined\":true,\"color\":\"gold\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://nitra.do/KevinFilmt\"}}]");
 
-        World w = player.getWorld();
-        w.setDifficulty(Difficulty.HARD);
+        World playerWorld = player.getWorld();
+        playerWorld.setDifficulty(Difficulty.HARD);
         World world = Bukkit.getWorld("world");
         world.setGameRuleValue("naturalRegeneration", "false");
         world.setDifficulty(Difficulty.PEACEFUL);
-
 
         File playersFile = new File("plugins/Novorex/Players/", playerName + ".yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
@@ -52,15 +52,8 @@ public class PlayerJoinListener implements Listener {
             world.setGameRuleValue("naturalRegeneration", "false");
             Bukkit.dispatchCommand(console, "scoreboard teams add " + teamName);
             Bukkit.dispatchCommand(console, "scoreboard teams join " + teamName + " " + playerName);
-            Bukkit.dispatchCommand(console, "lp group s" + teamName + " permission set essentials.warps." + teamName);
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Bukkit.dispatchCommand(console, "lp group l" + teamName + " permission set essentials.warps." + teamName);
-            String wn = w.getName();
-            if (wn.equals("world")) {
+            String playerWorldName = playerWorld.getName();
+            if (playerWorldName.equals("world")) {
                 player.sendMessage("§cAchtung! PVP ist in dieser Welt verboten!");
             } else {
                 player.sendMessage("§cAchtung! PVP ist in dieser Welt erlaubt!");
@@ -74,12 +67,8 @@ public class PlayerJoinListener implements Listener {
             Bukkit.dispatchCommand(console, "scoreboard teams add - ");
             Bukkit.dispatchCommand(console, "scoreboard teams join - " + playerName);
             printYml(playerName, "Team", "-");
-            try {
-                TimeUnit.SECONDS.sleep(3);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Bukkit.dispatchCommand(console, "clear " + playerName);
+            Bukkit.getScheduler().runTaskLater(Main.instance, () -> Bukkit.dispatchCommand(console, "clear " + playerName), 20L * 5);
+
 
         }
 
@@ -90,8 +79,11 @@ public class PlayerJoinListener implements Listener {
         setTablistHeaderAndFooter(player, "§fMinecraft §bHEXXIT §fII", "§6by Novorex.net / §6§oSponsor: Nitrado.net");
 
 
-        String p = String.format("%s", teamName);
-        String prefix = p + " ";
+
+        String prefix = String.format("%s", teamName);
+        if (prefix == null) {
+            prefix = "";
+        } else prefix = prefix + " ";
 
         if(player.isOp()) {
                 player.setPlayerListName("§r§l#" + prefix + "" + player.getDisplayName());
@@ -100,12 +92,7 @@ public class PlayerJoinListener implements Listener {
             }
 
         if (teamName.matches("-")) {
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            player.setPlayerListName("" + player.getDisplayName());
+            Bukkit.getScheduler().runTaskLater(Main.instance, () -> player.setPlayerListName("" + player.getDisplayName()), 20L * 3);
         }
             /*
         Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) this, new Runnable() {
