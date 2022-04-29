@@ -5,16 +5,14 @@ import me.marvin.api.PlayerWorldTimings;
 import me.marvin.api.Utils;
 import me.marvin.api.YAMLTimePlayed;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 
 
@@ -68,8 +66,10 @@ public class PlayerWorldTimingListener implements Listener {
         }, 20, 20);
     }
 
+    /* Spieler ist bereits in Bauwelt
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+
         Player player = event.getPlayer();
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
 
@@ -78,14 +78,17 @@ public class PlayerWorldTimingListener implements Listener {
             if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
                 player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
             } else {
-                playerWorldTimings.startCounting();
+                if(!player.hasPermission("empire.admin")) {
+                    playerWorldTimings.startCounting();
+                }
             }
         }
-    }
+    }*/
 
     @EventHandler
     public void onPlayerWorldChange(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
+        /* Legacy
         World worldTo = event.getPlayer().getWorld();
         World worldFrom = event.getFrom();
 
@@ -100,7 +103,31 @@ public class PlayerWorldTimingListener implements Listener {
         if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
             player.teleport(worldFrom.getSpawnLocation());
         } else {
-            playerWorldTimings.startCounting();
+            if(!player.hasPermission("empire.admin")) {
+                playerWorldTimings.startCounting();
+            }
+
+        }
+         */
+
+        World worldFrom = event.getFrom(), worldTo = event.getPlayer().getWorld();
+        if(worldFrom.equals(worldTo)) return;
+
+        PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
+        if(!player.hasPermission("empire.admin")) {
+            if (worldFrom.getName().equals(Bauwelt)) {
+                if (!playerWorldTimings.isCounting()) {
+                    playerWorldTimings.startCounting();
+                }
+            } else {
+                if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
+                    player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
+                } else {
+                    if (playerWorldTimings.isCounting()) {
+                        playerWorldTimings.stopCounting();
+                    }
+                }
+            }
         }
     }
 
@@ -110,9 +137,17 @@ public class PlayerWorldTimingListener implements Listener {
         String date = Utils.getDate();
 
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
-        if(playerWorldTimings.isCounting()) playerWorldTimings.stopCounting();
+        if(playerWorldTimings.isCounting()) {playerWorldTimings.stopCounting();}
         YAMLTimePlayed.printTime(date, player.getUniqueId().toString(), playerWorldTimings.getTimeSpend());
 
         PlayerWorldTimings.dispose(player.getUniqueId());
+
+        World bauwelt = Bukkit.getWorld(Bauwelt);
+        World world = player.getWorld();
+        String worldName = world.getName();
+
+        if (!worldName.equals(Bauwelt)) {
+            player.teleport(new Location(bauwelt, -4, 70, -6));
+        }
     }
 }

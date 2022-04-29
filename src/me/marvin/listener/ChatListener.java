@@ -41,11 +41,11 @@ public class ChatListener implements Listener
                 continue;
             }
             final double distance = target.getLocation().distance(player.getLocation());
-            if (distance > 30.0) {
+            if (distance > 60.0) {
                 continue;
             }
             ++i;
-            if (distance > 15.0) {
+            if (distance > 30.0) {
                 target.sendMessage("§f" + role + "" + player.getDisplayName() + " " + "§8➝ §o§7§k#§r§7§o" + randomizeMessage(event.getMessage()) + "§7§k#");
             }
             else {

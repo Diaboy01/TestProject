@@ -37,6 +37,7 @@ public class Main extends JavaPlugin {
         pluginManager.registerEvents(new ExplosionListener(), this);
         pluginManager.registerEvents(new PlayerLeaveListener(), this);
         pluginManager.registerEvents(new PortalListener(), this);
+        //pluginManager.registerEvents(new PlayerLoginListener(), this);
 
         getCommand("add").setExecutor(new AddLeader());
         getCommand("invite").setExecutor(new Invite());
