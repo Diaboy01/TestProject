@@ -110,18 +110,20 @@ public class PlayerWorldTimingListener implements Listener {
         }
          */
 
-        World worldFrom = event.getFrom(), worldTo = event.getPlayer().getWorld();
+        World worldFrom = event.getFrom();
+        World worldTo = event.getPlayer().getWorld();
         if(worldFrom.equals(worldTo)) return;
 
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
         if(!player.hasPermission("empire.admin")) {
-            if (worldFrom.getName().equals(Bauwelt)) {
+            if (!worldTo.getName().equals(Bauwelt)) { //worldFrom.getName().equals(Bauwelt)
                 if (!playerWorldTimings.isCounting()) {
                     playerWorldTimings.startCounting();
                 }
             } else {
                 if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
                     player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
+                    player.sendMessage("Deine Farmzeit ist für heute aufgebraucht!");
                 } else {
                     if (playerWorldTimings.isCounting()) {
                         playerWorldTimings.stopCounting();
