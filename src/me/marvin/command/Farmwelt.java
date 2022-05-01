@@ -64,32 +64,6 @@ public class Farmwelt implements CommandExecutor {
                 player.setInvulnerable(true);
                 Bukkit.getScheduler().runTaskLater(Main.instance, () -> player.setInvulnerable(false), 20L * 15);
 
-               // int randomX = random.nextInt(500 + 20) + 20;
-               // int randomZ = random.nextInt(500 + 20) + 20;
-
-               // int randomChunkX = randomX / 16;
-
-               // int randomChunkZ = randomZ / 16;
-
-                /*
-                Chunk chunk = farmworld.getChunkAt(0,0);
-
-                chunk.load();
-
-                Bukkit.dispatchCommand(console, "god " + playerName + " enable");
-
-
-                player.teleport(new Location(farmworld, 0, 255, 0));
-                Bukkit.dispatchCommand(console, "spreadplayers 0 0 10 25 true " + playerName);
-
-                try {
-                    TimeUnit.SECONDS.sleep(15);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                Bukkit.dispatchCommand(console, "god " + playerName + " disable");
-                */
             }
         }
     } else {

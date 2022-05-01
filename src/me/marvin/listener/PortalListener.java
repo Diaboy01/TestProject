@@ -52,13 +52,16 @@ public class PortalListener implements Listener {
         World Bauwelt = Bukkit.getWorld("world");
         Bauwelt.setDifficulty(Difficulty.PEACEFUL);
 
+        //TODO PvP Welt get aus config
+        String pvpworldName = "pvpworld1";
+
         File generalFile = new File("plugins/Novorex/General/", "Farmwelt.yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(generalFile);
 
         String farmworld = config.getString("Farmwelt");
 
         if(!event.getTo().getWorld().equals(event.getFrom().getWorld())) {
-            if (!(player.hasPermission("world.all")) && !(worldGetToName.equals("world") || worldGetToName.equals(farmworld) || worldGetToName.equals("DIM-1"))) {
+            if (!(player.hasPermission("world.all")) && !(worldGetToName.equals("world") || worldGetToName.equals(farmworld) || worldGetToName.equals("DIM-1") || worldGetToName.equals(pvpworldName))) {
                 event.setCancelled(true);
                 player.sendMessage("Welt/Dimension ist noch gesperrt!");
             } else if (worldGetToName.equals("world")) {

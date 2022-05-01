@@ -17,7 +17,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.concurrent.TimeUnit;
 
 import static me.marvin.api.YAMLPlayers.printYml;
 
@@ -79,6 +78,7 @@ public class PlayerJoinListener implements Listener {
         setTablistHeaderAndFooter(player, "§fMinecraft §bHEXXIT §fII", "§6by Novorex.net / §6§oSponsor: Nitrado.net");
 
 
+        //TODO bei FirstJoin ist Prefix trotzdem #null
 
         String prefix = String.format("%s", teamName);
         if (prefix == null) {

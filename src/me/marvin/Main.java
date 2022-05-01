@@ -24,6 +24,7 @@ public class Main extends JavaPlugin {
 
         instance = this;
 
+
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new PlayerJoinListener(), this);
         // pluginManager.registerEvents(new PlayerMoveListener(), this);
@@ -48,6 +49,8 @@ public class Main extends JavaPlugin {
         getCommand("wtp").setExecutor(new WorldTeleport());
         getCommand("modifydamage").setExecutor(new PlayerDamageCommand());
         getCommand("teambase").setExecutor(new SetTeamBase());
+        getCommand("teilnehmen").setExecutor(new Teilnehmen());
+        getCommand("pvpstart").setExecutor(new PvpStart());
 
         //new PlayerDamageCommand();
 

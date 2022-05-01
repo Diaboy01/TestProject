@@ -70,6 +70,13 @@ public class PlayerDeathListener implements Listener {
                 Location deathloc = event.getEntity().getLocation().add(0.0, 0.0, 0.0);
                 World w = player.getWorld();
                 ((World) w).strikeLightningEffect(deathloc);
+
+                //TODO PvP Welt get aus config
+                String pvpworldName = "pvpworld1";
+
+                if (world.equals(pvpworldName)) {
+                    player.teleport(Bukkit.getWorld("world").getSpawnLocation());
+                }
             }
         }
     }
