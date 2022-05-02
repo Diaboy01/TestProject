@@ -21,19 +21,18 @@ public class Farmwelt implements CommandExecutor {
         if (commandSender instanceof Player) {
             if (commandSender.hasPermission("empire.farmworld")) {
             Player player = (Player) commandSender;
-            String playerName = player.getName();
             File generalFile = new File("plugins/Novorex/General/", "Farmwelt.yml");
             YamlConfiguration config = YamlConfiguration.loadConfiguration(generalFile);
 
-            String farmworld = config.getString("Farmwelt");
-
-            World farm = Bukkit.getWorld(farmworld);
-
             World world = player.getWorld();
 
-            String w = world.getName();
+            String worldName = world.getName();
 
-            if (w.equals(farmworld)) {
+            String farmworldName = config.getString("Farmwelt");
+
+            World farmworld = Bukkit.getWorld(farmworldName);
+
+            if (worldName.equals(farmworldName)) {
                 commandSender.sendMessage("Du bist bereits in der Farmwelt!");
                 return false;
             }
@@ -46,9 +45,9 @@ public class Farmwelt implements CommandExecutor {
             if (args.length == 0) {
                 ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
                 commandSender.sendMessage("§aZufallsteleport in die Farmwelt...!");
-                if (farm == null) {
-                    farm = WorldCreator.name(farmworld).createWorld();
-                    Bukkit.createWorld(new WorldCreator(farmworld));
+                if (farmworld == null) {
+                    farmworld = WorldCreator.name(farmworldName).createWorld();
+                    Bukkit.createWorld(new WorldCreator(farmworldName));
                 };
 
                 Random random = new Random();
@@ -59,38 +58,12 @@ public class Farmwelt implements CommandExecutor {
                 int randomChunkX = randomX / 16;
                 int randomChunkZ = randomZ / 16;
                 
-                ((CraftWorld) farm).getHandle().getChunkProviderServer().getOrLoadChunkAt(randomChunkX, randomChunkZ);
-                World finalFarm = farm;
+                ((CraftWorld) farmworld).getHandle().getChunkProviderServer().getOrLoadChunkAt(randomChunkX, randomChunkZ);
+                World finalFarm = farmworld;
                 Bukkit.getScheduler().runTaskLater(Main.instance, () -> player.teleport(finalFarm.getHighestBlockAt(randomX, randomZ).getLocation().add(0, 1, 0)), 20L);
                 player.setInvulnerable(true);
                 Bukkit.getScheduler().runTaskLater(Main.instance, () -> player.setInvulnerable(false), 20L * 15);
 
-               // int randomX = random.nextInt(500 + 20) + 20;
-               // int randomZ = random.nextInt(500 + 20) + 20;
-
-               // int randomChunkX = randomX / 16;
-
-               // int randomChunkZ = randomZ / 16;
-
-                /*
-                Chunk chunk = farm.getChunkAt(0,0);
-
-                chunk.load();
-
-                Bukkit.dispatchCommand(console, "god " + playerName + " enable");
-
-
-                player.teleport(new Location(farm, 0, 255, 0));
-                Bukkit.dispatchCommand(console, "spreadplayers 0 0 10 25 true " + playerName);
-
-                try {
-                    TimeUnit.SECONDS.sleep(15);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                Bukkit.dispatchCommand(console, "god " + playerName + " disable");
-                */
             }
         }
     } else {
