@@ -9,6 +9,7 @@ import java.io.File;
 
 public class Invite implements CommandExecutor {
 
+    //TODO /invite geht nicht?
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if(commandSender instanceof Player) {

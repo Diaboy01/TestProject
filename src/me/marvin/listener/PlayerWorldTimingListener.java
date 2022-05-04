@@ -11,7 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.text.SimpleDateFormat;
 
@@ -66,53 +68,35 @@ public class PlayerWorldTimingListener implements Listener {
         }, 20, 20);
     }
 
-    /* Spieler ist bereits in Bauwelt
+
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
+        final Player player = event.getPlayer();
+        World worldTo = event.getPlayer().getWorld();
 
-        Player player = event.getPlayer();
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
-
-        World world = player.getWorld();
-        if(!(world.getName().equalsIgnoreCase(Bauwelt))) {
-            if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
-                player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
-            } else {
-                if(!player.hasPermission("empire.admin")) {
+        if(!player.hasPermission("empire.admin")) {
+            if (!worldTo.getName().equals(Bauwelt)) { //worldFrom.getName().equals(Bauwelt)
+                if (!playerWorldTimings.isCounting()) {
                     playerWorldTimings.startCounting();
+                }
+            } else {
+                if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
+                    player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
+                    player.sendMessage("Deine Farmzeit ist für heute aufgebraucht!");
+                } else {
+                    if (playerWorldTimings.isCounting()) {
+                        playerWorldTimings.stopCounting();
+                    }
                 }
             }
         }
-    }*/
+    }
 
     @EventHandler
-    public void onPlayerWorldChange(PlayerChangedWorldEvent event) {
-        Player player = event.getPlayer();
-        /* Legacy
-        World worldTo = event.getPlayer().getWorld();
-        World worldFrom = event.getFrom();
-
-        PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
-        if(worldTo.getName().equalsIgnoreCase(Bauwelt)) {
-            if(playerWorldTimings.isCounting()) {
-                playerWorldTimings.stopCounting();
-            }
-            return;
-        }
-
-        if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
-            player.teleport(worldFrom.getSpawnLocation());
-        } else {
-            if(!player.hasPermission("empire.admin")) {
-                playerWorldTimings.startCounting();
-            }
-
-        }
-         */
-
-        World worldFrom = event.getFrom();
-        World worldTo = event.getPlayer().getWorld();
-        if(worldFrom.equals(worldTo)) return;
+    public void onPlayerTeleport(final PlayerTeleportEvent event) {
+        final Player player = event.getPlayer();
+        World worldTo = event.getTo().getWorld();
 
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
         if(!player.hasPermission("empire.admin")) {

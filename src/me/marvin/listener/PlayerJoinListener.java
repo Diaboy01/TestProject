@@ -66,8 +66,9 @@ public class PlayerJoinListener implements Listener {
             Bukkit.dispatchCommand(console, "scoreboard teams add - ");
             Bukkit.dispatchCommand(console, "scoreboard teams join - " + playerName);
             printYml(playerName, "Team", "-");
-            Bukkit.getScheduler().runTaskLater(Main.instance, () -> Bukkit.dispatchCommand(console, "clear " + playerName), 20L * 5);
-
+            player.sendTitle("HEXXIT II", "Willkommen " + playerName + "!", 20, 120, 20);
+            Bukkit.getScheduler().runTaskLater(Main.instance, () -> Bukkit.dispatchCommand(console, "clear " + playerName), 20L * 8);
+            Bukkit.getScheduler().runTaskLater(Main.instance, () ->Bukkit.dispatchCommand(console, "kit give starter " + playerName), 20L * 10);
 
         }
 

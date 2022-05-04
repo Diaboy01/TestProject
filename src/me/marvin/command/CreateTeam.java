@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 public class CreateTeam implements CommandExecutor {
 
+    //TODO geht korrekt?
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if(commandSender instanceof Player) {

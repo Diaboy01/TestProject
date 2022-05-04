@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class PlayerWorldTimings {
 
-    public static final long TIME_LIMIT = 1000 * 60 * 30; // 30min
+    public static final long TIME_LIMIT = 1000 * 60 * 60; // 60 min.
 
     private static HashMap<UUID, PlayerWorldTimings> cache = new HashMap<>();
 
