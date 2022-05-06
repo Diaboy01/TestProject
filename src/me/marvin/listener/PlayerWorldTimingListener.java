@@ -106,8 +106,11 @@ public class PlayerWorldTimingListener implements Listener {
                 }
             } else {
                 if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
-                    player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
+                    event.setCancelled(true);
+                    //TODO nicht Canceln!
+                    //Bukkit.getScheduler().runTaskLater(Main.instance, () ->player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation()), 20L * 2);
                     player.sendMessage("Deine Farmzeit ist für heute aufgebraucht!");
+                    //TODO Spieler kicken?
                 } else {
                     if (playerWorldTimings.isCounting()) {
                         playerWorldTimings.stopCounting();
