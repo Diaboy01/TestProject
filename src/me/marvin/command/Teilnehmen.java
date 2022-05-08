@@ -22,6 +22,7 @@ public class Teilnehmen implements CommandExecutor {
             World pvpworld = Bukkit.getWorld(pvpworldName);
 
             //TODO bei WTP wird Welt geladen. Ist die Welt nicht geladen wird setDifficulty etc. einen fehler werfen
+            //TODO Difficutly wird bereits in PortalListener geändert
 
             pvpworld.setDifficulty(Difficulty.PEACEFUL);
             pvpworld.setGameRuleValue("naturalRegeneration", "false");

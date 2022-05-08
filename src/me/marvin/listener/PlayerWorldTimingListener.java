@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
@@ -52,11 +51,13 @@ public class PlayerWorldTimingListener implements Listener {
                     if(playerWorldTimings.isCounting()) {
                         long time = PlayerWorldTimings.TIME_LIMIT - playerWorldTimings.getTimeSpend();
 
-                        if (time == 60000 || time == 60001) {
-                            player.sendMessage("Achtung! Du hast noch Spielzeit 1 Minute in der Farmwelt, setze ein Home um deine Postion in der Farmwelt zu speichern! Mit: /sethome");
+                        if (time < 500) {
+                            player.sendMessage("Deine Farmzeit ist für heute aufgebraucht!");
+                            player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
                         }
-
-                        player.sendActionBar("Verbleibende Spielzeit: §a" + FORMAT.format(time));
+                        if (time > 500) {
+                            player.sendActionBar("Verbleibende Farmzeit: §a" + FORMAT.format(time));
+                        }
 
                         if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
                             player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
@@ -106,11 +107,7 @@ public class PlayerWorldTimingListener implements Listener {
                 }
             } else {
                 if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
-                    event.setCancelled(true);
-                    //TODO nicht Canceln!
-                    //Bukkit.getScheduler().runTaskLater(Main.instance, () ->player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation()), 20L * 2);
-                    player.sendMessage("Deine Farmzeit ist für heute aufgebraucht!");
-                    //TODO Spieler kicken?
+                    //Leer lassen um Spam zu vermeiden
                 } else {
                     if (playerWorldTimings.isCounting()) {
                         playerWorldTimings.stopCounting();

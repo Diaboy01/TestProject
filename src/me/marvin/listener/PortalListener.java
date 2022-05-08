@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.io.File;
@@ -21,7 +20,7 @@ public class PortalListener implements Listener {
         final Player player = event.getPlayer();
         World worldGetTo = event.getPlayer().getWorld();
         String worldGetToName = worldGetTo.getName();
-        worldGetTo.setDifficulty(Difficulty.HARD);
+        worldGetTo.setDifficulty(Difficulty.HARD); //TODO Ausnahme: PvP World
         worldGetTo.setGameRuleValue("naturalRegeneration", "false");
         World Bauwelt = Bukkit.getWorld("world");
         Bauwelt.setDifficulty(Difficulty.PEACEFUL);

@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 
 public class CreateTeam implements CommandExecutor {
 
-    //TODO geht korrekt?
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if(commandSender instanceof Player) {
@@ -41,7 +40,6 @@ public class CreateTeam implements CommandExecutor {
 
                     Bukkit.getScheduler().runTaskLater(Main.instance, () -> commandSender.sendMessage("Team: " + args[0] + " wurde erstellt!"), 20L * 2);
 
-                    //TODO testen
 
                 }
             }

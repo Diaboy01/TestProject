@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerLoginListener implements Listener {
-    //TODO Listener umbennen
+    //TODO Listener umbennen / Inhalt korrekt verschieben
 
     @EventHandler
     public void playerLogin(PlayerJoinEvent event) {
