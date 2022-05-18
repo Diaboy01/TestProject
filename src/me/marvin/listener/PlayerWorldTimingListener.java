@@ -76,7 +76,7 @@ public class PlayerWorldTimingListener implements Listener {
         World worldTo = event.getPlayer().getWorld();
 
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
-        if(!player.hasPermission("empire.admin")) {
+        if(!(player.hasPermission("empire.admin") || player.hasPermission("empire.notime"))) {
             if (!worldTo.getName().equals(Bauwelt)) { //worldFrom.getName().equals(Bauwelt)
                 if (!playerWorldTimings.isCounting()) {
                     playerWorldTimings.startCounting();
@@ -100,7 +100,7 @@ public class PlayerWorldTimingListener implements Listener {
         World worldTo = event.getTo().getWorld();
 
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
-        if(!player.hasPermission("empire.admin")) {
+        if(!(player.hasPermission("empire.admin") || player.hasPermission("empire.notime"))) {
             if (!worldTo.getName().equals(Bauwelt)) { //worldFrom.getName().equals(Bauwelt)
                 if (!playerWorldTimings.isCounting()) {
                     playerWorldTimings.startCounting();
