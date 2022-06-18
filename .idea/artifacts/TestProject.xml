@@ -2,7 +2,7 @@
   <artifact type="jar" name="TestProject">
     <output-path>$USER_HOME$/Desktop/Mohist 1.12.2/plugins</output-path>
     <root id="archive" name="TestProject.jar">
-      <element id="module-output" name="TestProject" />
+      <element id="module-output" name="TestProject2" />
     </root>
   </artifact>
 </component>
